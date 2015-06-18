@@ -1,10 +1,12 @@
-enchant();
 var game,player,backgroundMap,mob,commands;
+var sumFPS=0;
 
 commands={};
 
 $(function(){
  game=new Game(16*9,16*9);
+ lbl=new Label();
+ lbl.moveTo(10,50);
  game.fps=60;
  game.preload('images/chara0.png','images/map1.png');
  game.onload=function(){
@@ -99,25 +101,6 @@ $(function(){
   mob.vx=1;
   mob.direction=2;
   mob.vy=0;
-  mob.frameFunc=function(e){
-   this.frame=this.direction*3 + this.walk;
-   if(this.isMoving){
-    // this.actionWalk();
-   }else{
-    var x=this.x+(this.vx ? this.vx/Math.abs(this.vx)*16 : 0)+this.offsetX;
-    if(x < 0 || backgroundMap.width <= x || backgroundMap.hitTest(x,this.y) || mob.hitTest(player,{x:x-this.offsetX})){
-     this.vx*=-1;
-     if(this.vx < 0){
-      this.direction=1;
-     }else{
-      this.direction=2;
-     }
-     // 衝突判定なしのため下手したら重なる
-    }
-    this.isMoving=true;
-    // this.actionWalk();
-   }
-  }
   mob.setBaseVelocity(1);
   //mob.addEventListener('enterframe',mob.frameFunc);
 
@@ -126,6 +109,7 @@ $(function(){
   stage.addChild(player);
   stage.addChild(mob);
   game.rootScene.addChild(stage);
+  game.rootScene.addChild(lbl);
   game.rootScene.addEventListener('enterframe',function(e){
    // 左,上を基準にするか否か
    // (game.width)/2-X<0となるのはプレイヤーがマップを左上に固定したときに画面から右に居るとき
@@ -138,119 +122,16 @@ $(function(){
    y=Math.max(game.height, y+backgroundMap.height) - backgroundMap.height;
    stage.x=x;
    stage.y=y;
+   sumFPS+=game.actualFps;
+   if(game.frame%10==0){
+    lbl.text=Math.round(sumFPS/10);
+    sumFPS=0;
+   }
   });
  }
  game.start();
 });
 
-var Characters=enchant.Class.create(enchant.Sprite,{
-  initialize: function(x,y,offsetX,offsetY){
-   enchant.Sprite.call(this,32,32);
-   this.offsetX=offsetX;
-   this.offsetY=offsetY;
-   this.x=x*16-offsetX;
-   this.y=y*16-offsetY;
-   this.isMoving=0;
-   this.direction=0;
-   this.walk=1;
-   this.vx=0;
-   this.vy=0;
-   this.queue=[];
-   this.addEventListener('enterframe',this.doAction);
-  },
-  frameFunc: function(e){
-  },
-  setBaseVelocity: function(v){
-   this.baseVelocity=16/Math.floor(16/v);
-  },
-  /*
-   * intersectだと実際の当たり判定での判定が出来ないため
-   * x,yからoffsetX,offsetYを足して大きさを計算して当たり判定計算
-   */
-  hitTest: function(target,option){
-   option = option || {};
-   var x,y;
-   var targetX,targetY;
-   x=option.x || this.x;
-   y=option.y || this.y;
-   targetX=option.targetX || target.x;
-   targetY=option.targetY || target.y;
-   return (x+this.offsetX < targetX+target.offsetX+16 && targetX+target.offsetX < x+this.offsetX+16 && y+this.offsetY < targetY+ target.offsetY +16 && targetY+target.offsetY  < y+this.offsetY+16);
-  },
-  // コマンドをpush
-  // もし作成時にすでにpopFlagが真であれば追加しない
-  pushCommand: function(command_name,properties){
-   var act=new commands[command_name](this,properties);
-   if(act.popFlag()){
-    delete act;
-   }else{
-    this.queue.push(act);
-   }
-  },
-  /*
-   * queueの先頭を見て実行
-   */
-  doAction: function(){
-   var act=this.queue[0];
-   if(typeof act ==="undefined"){
-    return;
-   }
-   act.action();
-   if(act.popFlag()){
-    this.queue.shift();
-   }
-  }
-});
-
-var Player=enchant.Class.create(Characters,{
-  initialize: function(x,y,offsetX,offsetY){
-   Characters.call(this,x,y,offsetX,offsetY);
-   this.baseVelocity=4;
-  },
-  waitInput: function(){
-   this.vx=this.vy=0;
-   if(game.input.left){
-    this.direction=1;
-    this.vx=-this.baseVelocity;
-   }else if(game.input.right){
-    this.direction=2;
-    this.vx=this.baseVelocity;;
-   }else if(game.input.up){
-    this.direction=3;
-    this.vy=-this.baseVelocity;
-   }else if(game.input.down){
-    this.direction=0;
-    this.vy=this.baseVelocity;
-   }
-   if(this.vx || this.vy){
-    var x=this.x + (this.vx ? this.vx/Math.abs(this.vx)*16: 0)+this.offsetX;
-    var y=this.y + (this.vy ? this.vy/Math.abs(this.vy)*16: 0)+this.offsetY;
-    if(0 <= x && x < backgroundMap.width && 0 <= y && y<backgroundMap.height && !backgroundMap.hitTest(x,y) && !this.hitTest(mob,{x:x-this.offsetX,y:y-this.offsetY})){
-     this.isMoving=true;
-     // こうしないと判定に1フレーム費やしてしまいカクカクする
-     this.actionWalk();
-    }
-   }
-  }
-});
-
-var Command=enchant.Class.create({
-  initialize:function(owner,properties){
-   // 実行者
-   this.owner=owner;
-   // 実行時のプロパティ
-   this.properties=properties;
-  },
-  // コマンド削除フラグ
-  // 追加時にpopFlagが真であれば削除
-  popFlag: function(){
-   return true;
-  },
-  // 1フレームごとに行う動作
-  // 必ず1回は実行される
-  action: function(){
-  }
-});
 
 commands['walk']=enchant.Class.create(Command,{
   /*
@@ -283,6 +164,8 @@ commands['walk']=enchant.Class.create(Command,{
    default:
     throw new Error("Invalid value: properties");
    }
+   this.owner.frame=this.direction*3+this.walk;
+   this.owner.direction=this.direction;
    if(!this.checkValid()){
     this.isMoving=false;
    }
@@ -329,3 +212,55 @@ commands['wait']=enchant.Class.create(Command,{
    return this.count==0;
   }
 });
+
+commands['think']=enchant.Class.create(Command,{
+  initialize:function(owner,properties){
+   Command.call(this,owner,properties);
+   this.executed=false;
+  },
+  action:function(){
+   this.owner.thinkingRountine();
+   this.executed=true;
+  },
+  popFlag:function(){
+   return this.executed;
+  }
+});
+
+var Player=enchant.Class.create(Characters,{
+  initialize: function(x,y,offsetX,offsetY){
+   Characters.call(this,x,y,offsetX,offsetY);
+   this.baseVelocity=4;
+   this.pushCommand('think',{});
+  },
+  thinkingRountine:function(){
+   this.pushCommand(new this.waitInput(this,{}));
+  },
+  // 入力待機
+  waitInput:enchant.Class.create(Command,{
+    action:function(){
+     var direction;
+     if(game.input.left){
+      direction=1;
+     }else if(game.input.right){
+      direction=2;
+     }else if(game.input.up){
+      direction=3;
+     }else if(game.input.down){
+      direction=0;
+     }
+     if(direction!==undefined){
+      this.owner.pushCommand('walk',{direction: direction});
+      // 滑らかに動かすために1度actionを実行する
+      if(this.owner.queue[1]!==undefined){
+       this.owner.queue[1].action();
+      }
+      this.owner.pushCommand('think',{});
+     }
+    },
+    popFlag:function(){
+     return (typeof this.owner.queue[1] !=="undefined");
+    }
+  })
+});
+
