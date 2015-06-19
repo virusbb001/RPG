@@ -1,14 +1,41 @@
 var game,player,backgroundMap,mob,commands;
 var sumFPS=0;
+var entities=new Group();
+if(typeof entities.checkHit ==="undefined"){
+ entities.checkHit=function(target,options,hitTestOption){
+  var hits=[];
+  var nodes=this.childNodes;
+  var hitOpt=hitTestOption || {};
+  var opts=options || {};
+  var maxLength=opts.maxLength||-1;
+  for(i=0;i<nodes.length /* && (maxLength < 0 || hits.length<=maxLength) */;i++){
+   if(nodes[i]===target){
+    continue;
+   }
+   if(target.hitTest(nodes[i],hitOpt)){
+    hits.push(nodes[i]);
+   }
+  }
+  return hits;
+ };
+}
+var paused=false;
 
-commands={};
+function toggle_pause(){
+ if(paused){
+  game.resume()
+ }else{
+  game.pause();
+ }
+ paused=!paused;
+}
 
 $(function(){
- game=new Game(16*9,16*9);
- lbl=new Label();
- lbl.moveTo(10,50);
+ game=new Game(16*5,16*5);
+ lbl=new MutableText(0,0,game.width);
+ // lbl.moveTo(10,50);
  game.fps=60;
- game.preload('images/chara0.png','images/map1.png');
+ game.preload('font0.png','images/chara0.png','images/map1.png');
  game.onload=function(){
   backgroundMap = new Map(16, 16);
   backgroundMap.image = game.assets['images/map1.png'];
@@ -41,19 +68,7 @@ $(function(){
   var image=new Surface(96,128);
   image.draw(game.assets['images/chara0.png'],0,0,96,128,0,0,96,128);
   // 線を引く
-  //画像枠
-  for(i=0;i<96/32;i++){
-   image.context.beginPath();
-   image.context.moveTo(i*32,0);
-   image.context.lineTo(i*32,128);
-   image.context.stroke();
-  }
-  for(i=0;i<128/32;i++){
-   image.context.beginPath();
-   image.context.moveTo(0,i*32);
-   image.context.lineTo(96,i*32);
-   image.context.stroke();
-  }
+  // 衝突判定枠
   for(i=0;i<12;i++){
    var x,y;
    x=(i%3)*32;
@@ -68,21 +83,10 @@ $(function(){
    image.context.stroke();
   }
   player.image=image;
+  entities.addChild(player);
 
   mob = new Characters(5,2,8,16);
   mobImage=new Surface(96,128);
-  for(i=0;i<96/32;i++){
-   mobImage.context.beginPath();
-   mobImage.context.moveTo(i*32,0);
-   mobImage.context.lineTo(i*32,128);
-   mobImage.context.stroke();
-  }
-  for(i=0;i<128/32;i++){
-   mobImage.context.beginPath();
-   mobImage.context.moveTo(0,i*32);
-   mobImage.context.lineTo(96,i*32);
-   mobImage.context.stroke();
-  }
   for(i=0;i<12;i++){
    var x,y;
    x=(i%3)*32;
@@ -98,17 +102,31 @@ $(function(){
   }
   mobImage.draw(game.assets['images/chara0.png'],96,0,96,128,0,0,96,128);
   mob.image=mobImage;
-  mob.vx=1;
   mob.direction=2;
-  mob.vy=0;
   mob.setBaseVelocity(1);
-  //mob.addEventListener('enterframe',mob.frameFunc);
+  mob.preX=undefined;
+  mob.thinkingRountine=function(){
+   if(this.preX==this.x){
+    if(this.direction==2){
+     this.direction=1;
+    }else{
+     this.direction=2;
+    }
+    this.pushCommand('wait',{count:30});
+    // この時に判定する
+    this.pushCommand('walk',{direction: this.direction});
+   }else{
+    this.pushCommand('walk',{direction: this.direction});
+   }
+   this.preX=this.x;
+   this.pushCommand('think',{});
+  }
+  entities.addChild(mob);
 
   var stage=new Group();
   stage.addChild(backgroundMap);
-  stage.addChild(player);
-  stage.addChild(mob);
   game.rootScene.addChild(stage);
+  game.rootScene.addChild(entities);
   game.rootScene.addChild(lbl);
   game.rootScene.addEventListener('enterframe',function(e){
    // 左,上を基準にするか否か
@@ -122,116 +140,22 @@ $(function(){
    y=Math.max(game.height, y+backgroundMap.height) - backgroundMap.height;
    stage.x=x;
    stage.y=y;
+   entities.x=x;
+   entities.y=y;
    sumFPS+=game.actualFps;
    if(game.frame%10==0){
-    lbl.text=Math.round(sumFPS/10);
+    lbl.setText(""+Math.round(sumFPS/10));
     sumFPS=0;
    }
   });
  }
- game.start();
-});
-
-
-commands['walk']=enchant.Class.create(Command,{
-  /*
-   * 0: Down 1: Left 2: Right 3: Up
-   */
-  initialize: function(owner,properties){
-   Command.call(this,owner,properties);
-   this.walk=1;
-   if( !(properties!=undefined && properties.direction!=undefined)){
-    throw(new Error("missing property: direction"));
-   }
-   this.direction=properties.direction;
-   this.isMoving=true;
-   // 方向から速度指定
-   this.vx=0;
-   this.vy=0;
-   switch (properties.direction) {
-   case 1:
-    this.vx=-this.owner.baseVelocity;
-    break;
-   case 2:
-    this.vx=this.owner.baseVelocity;
-    break;
-   case 3:
-    this.vy=-this.owner.baseVelocity;
-    break;
-   case 0:
-    this.vy=this.owner.baseVelocity;
-    break;
-   default:
-    throw new Error("Invalid value: properties");
-   }
-   this.owner.frame=this.direction*3+this.walk;
-   this.owner.direction=this.direction;
-   if(!this.checkValid()){
-    this.isMoving=false;
-   }
-  },
-  action: function(){
-   if(!this.isMoving){
-    return;
-   }
-   this.owner.frame=this.direction*3+this.walk;
-   this.owner.moveBy(this.vx,this.vy);
-   if( game.frame%3 == 0){
-    this.walk++;
-    this.walk%=3;
-   }
-   if( (this.vx&&(this.owner.x - this.owner.offsetX)%16 == 0)||(this.vy && (this.owner.y-this.owner.offsetY) % 16 == 0)){
-    this.isMoving=false;
-    this.walk=1;
-   }
-  },
-  // 移動先が壁じゃないかどうかなど
-  // 無効な移動は拒否する
-  checkValid: function(){
-   var x=this.owner.x + (this.vx ? this.vx/Math.abs(this.vx)*16: 0) + this.owner.offsetX;
-   var y=this.owner.y + (this.vy ? this.vy/Math.abs(this.vy)*16: 0) + this.owner.offsetY;
-   return (0<=x && x< backgroundMap.width && 0<=y && y<backgroundMap.height && !backgroundMap.hitTest(x,y) /*&&hitentities*/ );
-  },
-  popFlag: function(){
-   return !this.isMoving;
-  }
-});
-
-commands['wait']=enchant.Class.create(Command,{
-  /*
-   * その場で待機
-   */
-  initialize:function(owner,properties){
-   Command.call(this,owner,properties);
-   this.count=this.properties.count || 0;
-  },
-  action:function(){
-   this.count--;
-  },
-  popFlag:function(){
-   return this.count==0;
-  }
-});
-
-commands['think']=enchant.Class.create(Command,{
-  initialize:function(owner,properties){
-   Command.call(this,owner,properties);
-   this.executed=false;
-  },
-  action:function(){
-   this.owner.thinkingRountine();
-   this.executed=true;
-  },
-  popFlag:function(){
-   return this.executed;
-  }
+ game.debug();
 });
 
 var Player=enchant.Class.create(Characters,{
   initialize: function(x,y,offsetX,offsetY){
    Characters.call(this,x,y,offsetX,offsetY);
    this.baseVelocity=4;
-   this.pushCommand('think',{});
   },
   thinkingRountine:function(){
    this.pushCommand(new this.waitInput(this,{}));

@@ -1,4 +1,4 @@
-enchant();
+enchant('ui');
 
 var Characters=enchant.Class.create(enchant.Sprite,{
   initialize: function(x,y,offsetX,offsetY){
@@ -14,6 +14,7 @@ var Characters=enchant.Class.create(enchant.Sprite,{
    this.vy=0;
    this.queue=[];
    this.addEventListener('enterframe',this.doAction);
+   this.pushCommand('think',{});
   },
   setBaseVelocity: function(v){
    this.baseVelocity=16/Math.floor(16/v);
@@ -74,6 +75,7 @@ var Command=enchant.Class.create({
    this.owner=owner;
    // 実行時のプロパティ
    this.properties=properties;
+   this.actioning=false;
   },
   // コマンド削除フラグ
   // 追加時にpopFlagが真であれば削除
