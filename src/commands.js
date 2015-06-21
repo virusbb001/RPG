@@ -5,6 +5,7 @@ commands['walk']=enchant.Class.create(Command,{
    */
   initialize: function(owner,properties){
    Command.call(this,owner,properties);
+   this.preAction=true;
    this.walk=1;
    if( !(properties!=undefined && properties.direction!=undefined)){
     throw(new Error("missing property: direction"));
@@ -28,15 +29,16 @@ commands['walk']=enchant.Class.create(Command,{
     this.vy=this.owner.baseVelocity;
     break;
    default:
-    throw new Error("Invalid value: properties");
+    throw new Error("Invalid value: properties.direction");
    }
    this.owner.frame=this.direction*3+this.walk;
    this.owner.direction=this.direction;
-   if(!this.checkValid()){
-    this.isMoving=false;
-   }
   },
   action: function(){
+   if(this.preAction&&!this.checkValid()){
+    this.isMoving=false;
+   }
+   this.preAction=false;
    if(!this.isMoving){
     return;
    }
@@ -57,7 +59,7 @@ commands['walk']=enchant.Class.create(Command,{
    var x=this.owner.x + (this.vx ? this.vx/Math.abs(this.vx)*16: 0) + this.owner.offsetX;
    var y=this.owner.y + (this.vy ? this.vy/Math.abs(this.vy)*16: 0) + this.owner.offsetY;
    var opts={x:x-this.owner.offsetX,y:y-this.owner.offsetY};
-   return (0<=x && x< backgroundMap.width && 0<=y && y<backgroundMap.height && !backgroundMap.hitTest(x,y) && entities.checkHit(this.owner,{},opts).length==0);
+   return (0<=x && x< backgroundMap.width && 0<=y && y<backgroundMap.height && !backgroundMap.hitTest(x,y) && characterList.checkHit(this.owner,{},opts).length==0);
   },
   popFlag: function(){
    return !this.isMoving;

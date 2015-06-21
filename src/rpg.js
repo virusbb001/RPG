@@ -1,42 +1,53 @@
 var game,player,backgroundMap,mob,commands;
 var sumFPS=0;
-var entities=new Group();
-if(typeof entities.checkHit ==="undefined"){
- entities.checkHit=function(target,options,hitTestOption){
-  var hits=[];
-  var nodes=this.childNodes;
-  var hitOpt=hitTestOption || {};
-  var opts=options || {};
-  var maxLength=opts.maxLength||-1;
-  for(i=0;i<nodes.length /* && (maxLength < 0 || hits.length<=maxLength) */;i++){
-   if(nodes[i]===target){
-    continue;
-   }
-   if(target.hitTest(nodes[i],hitOpt)){
-    hits.push(nodes[i]);
-   }
-  }
-  return hits;
- };
-}
+var pause_scene,pause_text;
+// キャラクター用配列
+var characterList=new CharactersList();
 var paused=false;
 
 function toggle_pause(){
+ var message_list=
+  ([
+   "GAME PAUSED",
+   "PAME GAUSED",
+   "LOL U DIED",
+   "DISCONNECTED",
+   "ACCESS DENIED",
+   "YOU LOSE",
+   "GAME OVER",
+   "PAUSE AHEAD",
+   "TYPE THE COMMAND",
+   "$ SHUTDOWN",
+   "$ SHITDAMN",
+   "TOO COLD",
+  ]).filter(function(val,index,arr){
+   return val.length<=(game.width/16);
+  });
+
  if(paused){
+  game.popScene();
   game.resume()
  }else{
+  var text=message_list[Math.floor(Math.random()*message_list.length)];
+  pause_text.setText(text);
+  pause_text.x=game.width/2-text.length*16/2;
+  game.pushScene(pause_scene);
   game.pause();
  }
  paused=!paused;
 }
 
 $(function(){
- game=new Game(16*5,16*5);
+ game=new Game(16*16,16*16);
  lbl=new MutableText(0,0,game.width);
- // lbl.moveTo(10,50);
+
  game.fps=60;
  game.preload('font0.png','images/chara0.png','images/map1.png');
+ game.keybind(27,"pause");
+
+ // onload
  game.onload=function(){
+  /*
   backgroundMap = new Map(16, 16);
   backgroundMap.image = game.assets['images/map1.png'];
   backgroundMap.loadData([
@@ -62,6 +73,45 @@ $(function(){
    [0,0,0,0,0,0,0,0,1],
    [1,1,1,1,1,1,1,0,1]
   ];
+  */
+
+  backgroundMap = new Map(16, 16);
+  backgroundMap.image = game.assets['images/map1.png'];
+  backgroundMap.loadData([
+    [64,64,23,23,23,23,23,23,64,64],
+    [64,64,64,64,64,64,64,64,64,64],
+    [7,64,64,23,64,23,23,64,64,7],
+    [7,64,7,64,64,64,64,23,64,7],
+    [7,64,23,64,64,64,64,64,64,7],
+    [7,64,64,64,64,64,64,7,64,7],
+    [7,64,23,64,64,64,64,23,64,7],
+    [23,64,64,23,23,64,23,64,64,23],
+    [64,64,64,64,64,64,64,64,64,64],
+    [64,64,23,23,23,23,23,23,64,64]
+   ],[
+    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+  ]);
+  backgroundMap.collisionData = [
+   [0,0,1,1,1,1,1,1,0,0],
+   [0,0,0,0,0,0,0,0,0,0],
+   [1,0,0,1,0,1,1,0,0,1],
+   [1,0,1,0,0,0,0,1,0,1],
+   [1,0,1,0,0,0,0,0,0,1],
+   [1,0,0,0,0,0,0,1,0,1],
+   [1,0,1,0,0,0,0,1,0,1],
+   [1,0,0,1,1,0,1,0,0,1],
+   [0,0,0,0,0,0,0,0,0,0],
+   [0,0,1,1,1,1,1,1,0,0]
+  ];
 
   player=new Player(1,1,8,16);
   // 8ずらすことでキャラをマップ座標に居るように見せている
@@ -83,9 +133,10 @@ $(function(){
    image.context.stroke();
   }
   player.image=image;
-  entities.addChild(player);
+  characterList.addChild(player);
 
-  mob = new Characters(5,2,8,16);
+  mob = new MoveBot(0,0,8,16);
+  mob2= new MoveBot(0,1,8,16);
   mobImage=new Surface(96,128);
   for(i=0;i<12;i++){
    var x,y;
@@ -102,31 +153,17 @@ $(function(){
   }
   mobImage.draw(game.assets['images/chara0.png'],96,0,96,128,0,0,96,128);
   mob.image=mobImage;
-  mob.direction=2;
-  mob.setBaseVelocity(1);
-  mob.preX=undefined;
-  mob.thinkingRountine=function(){
-   if(this.preX==this.x){
-    if(this.direction==2){
-     this.direction=1;
-    }else{
-     this.direction=2;
-    }
-    this.pushCommand('wait',{count:30});
-    // この時に判定する
-    this.pushCommand('walk',{direction: this.direction});
-   }else{
-    this.pushCommand('walk',{direction: this.direction});
-   }
-   this.preX=this.x;
-   this.pushCommand('think',{});
-  }
-  entities.addChild(mob);
+  mob2.image=mobImage;
+  characterList.addChild(mob);
+  characterList.addChild(mob2);
 
   var stage=new Group();
   stage.addChild(backgroundMap);
+
+  game.rootScene.backgroundColor="#000000";
+  // rootSceneに追加
   game.rootScene.addChild(stage);
-  game.rootScene.addChild(entities);
+  game.rootScene.addChild(characterList);
   game.rootScene.addChild(lbl);
   game.rootScene.addEventListener('enterframe',function(e){
    // 左,上を基準にするか否か
@@ -140,21 +177,34 @@ $(function(){
    y=Math.max(game.height, y+backgroundMap.height) - backgroundMap.height;
    stage.x=x;
    stage.y=y;
-   entities.x=x;
-   entities.y=y;
+   characterList.x=x;
+   characterList.y=y;
    sumFPS+=game.actualFps;
    if(game.frame%10==0){
     lbl.setText(""+Math.round(sumFPS/10));
     sumFPS=0;
    }
+   characterList.sortY();
   });
+
+  // ポーズ設定
+  pause_scene=new Scene();
+  pause_text=new MutableText(0,game.height/2-16/2,game.width);
+  pause_text.setText("GAME PAUSED");
+  pause_scene.backgroundColor="rgba(0, 0, 0, 0.5)";
+  pause_scene.addChild(pause_text);
+
  }
+
+ game.addEventListener('pausebuttondown',function(){
+  toggle_pause();
+ });
  game.debug();
 });
 
-var Player=enchant.Class.create(Characters,{
+var Player=enchant.Class.create(Character,{
   initialize: function(x,y,offsetX,offsetY){
-   Characters.call(this,x,y,offsetX,offsetY);
+   Character.call(this,x,y,offsetX,offsetY);
    this.baseVelocity=4;
   },
   thinkingRountine:function(){
@@ -179,7 +229,6 @@ var Player=enchant.Class.create(Characters,{
       if(this.owner.queue[1]!==undefined){
        this.owner.queue[1].action();
       }
-      this.owner.pushCommand('think',{});
      }
     },
     popFlag:function(){
@@ -188,3 +237,26 @@ var Player=enchant.Class.create(Characters,{
   })
 });
 
+var MoveBot=enchant.Class.create(Character,{
+  initialize: function(x,y,offsetX,offsetY){
+   Character.call(this,x,y,offsetX,offsetY);
+   this.baseVelocity=1;
+   this.direction=2;
+   this.moveIndex=3;
+   this.preX=undefined;
+   this.preY=undefined;
+   this.moveArr=[3,1,0,2];
+  },
+  thinkingRountine: function(){
+   if(this.preX==this.x && this.preY==this.y){
+    this.moveIndex=(this.moveIndex+1)%this.moveArr.length;
+    this.direction=this.moveArr[this.moveIndex];
+    this.pushCommand('wait',{count:30});
+    this.pushCommand('walk',{direction: this.direction});
+   }else{
+    this.pushCommand('walk',{direction: this.direction});
+   }
+   this.preX=this.x;
+   this.preY=this.y;
+  }
+});
