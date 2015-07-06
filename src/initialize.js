@@ -133,6 +133,16 @@ var Character=enchant.Class.create(enchant.Sprite,{
    if(act.popFlag()){
     this.queue.shift();
    }
+  },
+  mapX: {
+   get: function(){
+    return (this.x+this.offsetX)/16;
+   },
+  },
+  mapY: {
+   get: function(){
+    return (this.y+this.offsetY)/16;
+   },
   }
 });
 
@@ -166,7 +176,11 @@ var Command=enchant.Class.create({
    * ownerのenterframeイベントの時に実行される
    */
   action: function(){
-  }
+  },
+  /**
+   * 表示用の名前
+   */
+  cmdName: null
 });
 
 /**
@@ -211,4 +225,63 @@ var CharactersList=enchant.Class.create(enchant.Group,{
     return a.y-b.y;
    });
   }
+});
+
+var MapScene=enchant.Class.create(enchant.Scene,{
+  initialize:function(player,bgMap,fgMap){
+   enchant.Scene.call(this);
+   // this.objList=new Group();
+   this.characterList=new CharactersList();
+   this.bgMap=bgMap;
+   this.fgMap=fgMap || null;
+   this.player=player;
+   this.addChild(this.bgMap);
+   this.addChild(this.characterList);
+   if(this.fgMap){
+    this.addChild(this.fgMap);
+   }
+   this.addEventListener('enterframe',function(e){
+    this.focusToPlayer();
+   });
+   this.addCharacters(this.player);
+  },
+  addCharacters: function(character){
+   this.characterList.addChild(character);
+  },
+  focusToPlayer: function(player){
+   var x,y;
+   var player=this.player;
+   if(game.width<this.bgMap.width){
+    // 左,上を基準にするか否か
+    // (game.width)/2-X<0となるのはプレイヤーがマップを左上に固定したときに画面から右に居るとき
+    // Xには中央に合わせたい値を入れる
+    // game.width>x+backgroundMap.widthとなるのは
+    // プレイヤーの位置が右からgame.width-X以内のとき
+    x=Math.min( (game.width )/2 - 16  - player.x, 0);
+    x=Math.max(game.width, x+this.bgMap.width) - this.bgMap.width;
+   }else{
+    x=game.width/2-this.bgMap.width/2;
+   }
+   if(game.height<this.bgMap.height){
+    y=Math.min( (game.height )/2 - 16  - player.y, 0);
+    y=Math.may(game.height, y+this.bgMap.height) - this.bgMap.height;
+   }else{
+    y=game.height/2-this.bgMap.height/2;
+   }
+   this.bgMap.x=x;
+   this.bgMap.y=y;
+   this.characterList.x=x;
+   this.characterList.y=y;
+  }
+  /*
+  enterframe: function(e){
+   // FPS計算
+   sumFPS+=game.actualFps;
+   if(game.frame%10==0){
+    this.lbl.setText(""+Math.round(sumFPS/10));
+    sumFPS=0;
+   }
+   this.characterList.sortY();
+  }
+  */
 });

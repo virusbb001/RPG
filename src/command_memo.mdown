@@ -1,0 +1,39 @@
+# コマンドを作るときにTIPS
+
+## 途中で入力をさせたい
+
+最初に"first?"と出力し入力待機、次に"second?"と表示し入力待機  
+最後に入力された文字を順番に出力する  
+
+```javascript
+var i=0;
+var a,b;
+this.echo("first?");
+this.push(function(input,term){
+},{
+ prompt: "> ",
+ name: "",
+ keydown: function(e,term){
+  if(e.keyCode==13){
+   console.log(prompt);
+   switch(i){
+   case 0:
+	a=term.get_command();
+	term.echo(term.get_prompt()+a);
+	term.set_command('');
+	i++;
+	term.echo("second?");
+	break;
+   case 1:
+	b=term.get_command();
+	term.echo(term.get_prompt()+b);
+	term.set_command('');
+	term.echo("a: "+a);
+	term.echo("b: "+b);
+	term.pop();
+   }
+   return false;
+  }
+ }
+});
+```

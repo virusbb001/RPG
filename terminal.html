@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8" />
+  <title></title>
+  <link rel="stylesheet" href="/lib/jquery.terminal/css/jquery.terminal.css" />
+  <style type="text/css">
+   body {
+    margin: 0;
+   }
+   /* override */
+   .terminal, .cmd {
+    /* 先に来たものが優先される */
+    font-family:  Osaka-mono, "Osaka-等幅", "MS ゴシック",monospace;
+   }
+   #terminal {
+    width: 100%;
+    padding: 0;
+   }
+  </style>
+  <script type="text/javascript" src="/lib/jquery.js"></script>
+  <!-- <script type="text/javascript" src="/lib/jquery.terminal/js/jquery.terminal-0.8.8.js"></script> -->
+  <script type="text/javascript" src="src/jquery.terminal-0.8.8.js"></script>
+  <script type="text/javascript" src="src/terminal.js"></script>
+ </head>
+ <body>
+  <div id="terminal"></div>
+ </body>
+</html>

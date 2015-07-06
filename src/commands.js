@@ -1,5 +1,30 @@
 commands={};
-commands['walk']=enchant.Class.create(Command,{
+function addCommand(name,definition){
+ if(commands[name]){
+  throw new Error('commands['+name+'] is already exist.');
+ }
+ definition.cmdName=name;
+ commands[name]=enchant.Class.create(Command,definition);
+ return commands[name];
+}
+
+/*
+addCommand('test',{
+  initialize: function(owner,properties){
+   Command.call(this,owner,properties);
+   this.doFlag=false;
+  },
+  action: function(){
+   console.log(this);
+   this.doFlag=true;
+  },
+  popFlag: function(){
+   return this.doFlag;
+  }
+});
+*/
+
+addCommand('walk',{
   /*
    * 0: Down 1: Left 2: Right 3: Up
    */
@@ -56,6 +81,7 @@ commands['walk']=enchant.Class.create(Command,{
   // 移動先が壁じゃないかどうかなど
   // 無効な移動は拒否する
   checkValid: function(){
+   var characterList=this.owner.parentNode.parentNode.characterList;
    var x=this.owner.x + (this.vx ? this.vx/Math.abs(this.vx)*16: 0) + this.owner.offsetX;
    var y=this.owner.y + (this.vy ? this.vy/Math.abs(this.vy)*16: 0) + this.owner.offsetY;
    var opts={x:x-this.owner.offsetX,y:y-this.owner.offsetY};
@@ -66,7 +92,7 @@ commands['walk']=enchant.Class.create(Command,{
   }
 });
 
-commands['wait']=enchant.Class.create(Command,{
+addCommand('wait',{
   /*
    * その場で待機
    */
@@ -82,7 +108,7 @@ commands['wait']=enchant.Class.create(Command,{
   }
 });
 
-commands['think']=enchant.Class.create(Command,{
+addCommand('think',{
   initialize:function(owner,properties){
    Command.call(this,owner,properties);
    this.executed=false;
@@ -97,7 +123,7 @@ commands['think']=enchant.Class.create(Command,{
 });
 
 // 危ない
-commands['func']=enchant.Class.create(Command,{
+addCommand('func',{
   initialize:function(owner,properties){
    Command.call(this,owner,properties);
    if(typeof properties.popFlag ==="undefined"){

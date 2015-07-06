@@ -1,25 +1,27 @@
-var game,player,backgroundMap,mob,commands;
+var game,player,backgroundMap,mob,commands,mob2;
+var map_start;
 var sumFPS=0;
 var pause_scene,pause_text;
 // キャラクター用配列
-var characterList=new CharactersList();
+// var characterList=new CharactersList();
 var paused=false;
 
 function toggle_pause(){
  var message_list=
   ([
    "GAME PAUSED",
-   "PAME GAUSED",
    "LOL U DIED",
    "DISCONNECTED",
+   "DISCONNECTED".split("").reverse().join(""),
    "ACCESS DENIED",
    "YOU LOSE",
    "GAME OVER",
    "PAUSE AHEAD",
    "TYPE THE COMMAND",
    "$ SHUTDOWN",
-   "$ SHITDAMN",
    "TOO COLD",
+   "PING",
+   "QUEUE",
   ]).filter(function(val,index,arr){
    return val.length<=(game.width/16);
   });
@@ -33,6 +35,7 @@ function toggle_pause(){
   pause_text.x=game.width/2-text.length*16/2;
   game.pushScene(pause_scene);
   game.pause();
+  window.parent.toggleConnect();
  }
  paused=!paused;
 }
@@ -46,35 +49,8 @@ $(function(){
  game.keybind(27,"pause");
 
  // onload
+ // プリロード
  game.onload=function(){
-  /*
-  backgroundMap = new Map(16, 16);
-  backgroundMap.image = game.assets['images/map1.png'];
-  backgroundMap.loadData([
-    [7,21,23,23,23,23,23,23,23],
-    [7,36,36,36,36,36,36,36,36],
-    [7,21,4,4,4,4,4,4,36],
-    [7,21,23,23,23,23,23,23,7],
-    [7,21,52,52,52,52,52,36,7],
-    [7,21,52,52,52,52,52,21,7],
-    [23,21,23,23,23,23,23,21,7],
-    [36,36,36,36,36,36,36,36,7],
-    [7,7,7,7,7,7,7,21,7]
-  ]);
-
-  backgroundMap.collisionData = [
-   [1,0,1,1,1,1,1,1,1],
-   [1,0,0,0,0,0,0,0,0],
-   [1,0,0,0,0,0,0,0,0],
-   [1,0,1,1,1,1,1,1,1],
-   [1,0,0,0,0,0,0,0,1],
-   [1,0,0,0,0,0,0,0,1],
-   [1,0,1,1,1,1,1,0,1],
-   [0,0,0,0,0,0,0,0,1],
-   [1,1,1,1,1,1,1,0,1]
-  ];
-  */
-
   backgroundMap = new Map(16, 16);
   backgroundMap.image = game.assets['images/map1.png'];
   backgroundMap.loadData([
@@ -93,7 +69,7 @@ $(function(){
     [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
     [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
     [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+    [-1,-1,-1,-1,-1,13,-1,-1,-1,-1],
     [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
     [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
     [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
@@ -133,7 +109,7 @@ $(function(){
    image.context.stroke();
   }
   player.image=image;
-  characterList.addChild(player);
+  // characterList.addChild(player);
 
   mob = new MoveBot(0,0,8,16);
   mob2= new MoveBot(0,1,8,16);
@@ -154,31 +130,18 @@ $(function(){
   mobImage.draw(game.assets['images/chara0.png'],96,0,96,128,0,0,96,128);
   mob.image=mobImage;
   mob2.image=mobImage;
-  characterList.addChild(mob);
-  characterList.addChild(mob2);
 
-  var stage=new Group();
-  stage.addChild(backgroundMap);
+  // マップシーン
+  map_start=new MapScene(player,backgroundMap);
+  map_start.addCharacters(mob);
+  map_start.addCharacters(mob2);
 
   game.rootScene.backgroundColor="#000000";
-  // rootSceneに追加
-  game.rootScene.addChild(stage);
-  game.rootScene.addChild(characterList);
-  game.rootScene.addChild(lbl);
+  game.pushScene(map_start);
+  // game.rootScene.addChild(lbl);
+  /*
   game.rootScene.addEventListener('enterframe',function(e){
-   // 左,上を基準にするか否か
-   // (game.width)/2-X<0となるのはプレイヤーがマップを左上に固定したときに画面から右に居るとき
-   // Xには中央に合わせたい値を入れる
-   var x=Math.min( (game.width )/2 - 16  - player.x, 0);
-   var y=Math.min( (game.height)/2 - 24 - player.y, 0);
-   // game.width>x+backgroundMap.widthとなるのは
-   // プレイヤーの位置が右からgame.width-X以内のとき
-   x=Math.max(game.width, x+backgroundMap.width) - backgroundMap.width;
-   y=Math.max(game.height, y+backgroundMap.height) - backgroundMap.height;
-   stage.x=x;
-   stage.y=y;
-   characterList.x=x;
-   characterList.y=y;
+   // FPS計算
    sumFPS+=game.actualFps;
    if(game.frame%10==0){
     lbl.setText(""+Math.round(sumFPS/10));
@@ -186,6 +149,7 @@ $(function(){
    }
    characterList.sortY();
   });
+  */
 
   // ポーズ設定
   pause_scene=new Scene();
@@ -193,7 +157,6 @@ $(function(){
   pause_text.setText("GAME PAUSED");
   pause_scene.backgroundColor="rgba(0, 0, 0, 0.5)";
   pause_scene.addChild(pause_text);
-
  }
 
  game.addEventListener('pausebuttondown',function(){
@@ -212,6 +175,7 @@ var Player=enchant.Class.create(Character,{
   },
   // 入力待機
   waitInput:enchant.Class.create(Command,{
+    cmdName: "player.waitInput",
     action:function(){
      var direction;
      if(game.input.left){
@@ -234,7 +198,11 @@ var Player=enchant.Class.create(Character,{
     popFlag:function(){
      return (typeof this.owner.queue[1] !=="undefined");
     }
-  })
+  }),
+  // 引き継ぎ用のステータスを返す関数
+  takeOver: function(){
+   return {}
+  }
 });
 
 var MoveBot=enchant.Class.create(Character,{
@@ -242,10 +210,13 @@ var MoveBot=enchant.Class.create(Character,{
    Character.call(this,x,y,offsetX,offsetY);
    this.baseVelocity=1;
    this.direction=2;
-   this.moveIndex=3;
    this.preX=undefined;
    this.preY=undefined;
-   this.moveArr=[3,1,0,2];
+   this.moveArr=[3,1,0,2].reverse();
+   this.moveIndex=this.moveArr.indexOf(this.direction);
+   if(this.moveIndex<0){
+    this.moveIndex=0;
+   }
   },
   thinkingRountine: function(){
    if(this.preX==this.x && this.preY==this.y){
@@ -260,3 +231,69 @@ var MoveBot=enchant.Class.create(Character,{
    this.preY=this.y;
   }
 });
+
+function getGameObj(){
+ return game;
+}
+
+function termCommands(){
+ var data={
+  player: player,
+  mob:mob,
+  mob2: mob2
+ };
+ var termObj={
+  objs: function(){
+   for(i in data){
+    this.echo(i);
+   }
+  },
+  echo: function(){
+   if(arguments.length==0){
+    this.echo("echo [String]");
+   }else{
+    var term=this;
+    Array.prototype.slice.call(arguments).forEach(function(i){
+     term.echo(i);
+    });
+   }
+  },
+  where: function(){
+   this.echo("(" + player.mapX + ", "+player.mapY+")");
+  },
+  commands: function(){
+   for(i in commands){
+    this.echo(i);
+   }
+  },
+  help: function(){
+   for(var i in termObj){
+    this.echo(i);
+   }
+  },
+  queue: function(){
+   var self=this;
+   player.queue.forEach(function(cmd){
+    self.echo(cmd.cmdName);
+   });
+  },
+  setTimeoutTest: (function(){
+   var i;
+   return function(self){
+    if(typeof self==="undefined"){
+     i=0;
+     self=this;
+    }
+    i++;
+    console.log(self.get_command());
+    self.echo(i);
+    if(i<5){
+     setTimeout(arguments.callee,1000,self);
+    }
+   };
+  })(),
+ };
+
+ return termObj;
+}
+

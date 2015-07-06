@@ -1,24 +1,21 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="x-ua-compatible" content="IE=Edge">
-        <meta name="viewport" content="width=device-width, user-scalable=no">
-        <meta name="apple-mobile-web-app-capable" content="yes"> 
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-        <title>enchant</title>
-        <script type="text/javascript" src="/lib/enchantjs/enchant.js"></script>
-        <script type="text/javascript" src="/lib/enchantjs/plugins/ui.enchant.js"></script>
-        <script type="text/javascript" src="/lib/jquery.js"></script>
-        <script type="text/javascript" src="src/initialize.js"></script>
-        <script type="text/javascript" src="src/commands.js"></script>
-        <script type="text/javascript" src="src/rpg.js"></script>
-        <style type="text/css">
-            body {
-                margin: 0;
-            }
-        </style>
-    </head>
-    <body>
-    </body>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <title>RPG</title>
+ <style type="text/css">
+   iframe {
+    display: block;
+   }
+   body {
+    margin: 0px;
+   }
+ </style>
+ <script type="text/javascript" src="/lib/jquery.js"></script>
+ <script type="text/javascript" src="src/parents.js"></script>
+</head>
+<body>
+ <iframe id="rpg" src="rpg.html" width="512" height="512"></iframe>
+ <iframe id="terminal" src="terminal.html" width="512"></iframe>
+</body>
 </html>
