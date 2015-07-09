@@ -7,14 +7,16 @@ var Character=enchant.Class.create(enchant.Sprite,{
   /**
    * @name Character
    * @class キャラクターのオブジェクト
-   * @param {Integer} x X座標
-   * @param {Integer} y Y座標
+   * @param {Integer} x マップX座標
+   * @param {Integer} y マップY座標
    * @param {Integer} offsetX 実際の当たり判定がxからどのくらいX軸方向離れているか
    * @param {Integer} offsetY 実際の当たり判定がyからどのくらいY軸方向離れているか
    * @extends enchant.Sprite
    */
-  initialize: function(x,y,offsetX,offsetY){
-   enchant.Sprite.call(this,32,32);
+  initialize: function(x,y,offsetX,offsetY,width,height){
+   var width=width||32;
+   var height=height||32;
+   enchant.Sprite.call(this,width,height);
    /**
     * 実際の当たり判定がxからどのくらいX軸方向離れているか
     * @type Integer
@@ -26,12 +28,12 @@ var Character=enchant.Class.create(enchant.Sprite,{
     */
    this.offsetY=offsetY;
    /**
-    * キャラクターのX座標
+    * キャラクターの表示X座標
     * @type Integer
     */
    this.x=x*16-offsetX;
    /**
-    * キャラクターのX座標
+    * キャラクターの表示Y座標
     * @type Integer
     */
    this.y=y*16-offsetY;
@@ -53,7 +55,7 @@ var Character=enchant.Class.create(enchant.Sprite,{
    this.pushCommand('think',{});
   },
   /**
-   * 速度指定
+   * 基本速度指定
    * @param {Integer} Velocity 速度
    */
   setBaseVelocity: function(v){
@@ -69,6 +71,7 @@ var Character=enchant.Class.create(enchant.Sprite,{
   /**
    * intersectだと実際の当たり判定での判定が出来ないためこの関数で衝突判定を行う
    * x,yからoffsetX,offsetYを足して大きさを計算して当たり判定計算
+   * this.hitTest(target)&&target.hitTest(this)がtrueであれば衝突判定を行う
    * @param {Character} target 衝突判定をする対象
    * @param {Object} [option={}] 衝突判定のオプション
    * @param {Integer} [option.x] 自身のX座標をxとして判定
@@ -94,7 +97,7 @@ var Character=enchant.Class.create(enchant.Sprite,{
    targetY+=target.offsetY;
 
    // <=にしないのは隣通しでも重なっていると判定されるようになってしまうため
-   return (x < targetX+16 && targetX < x +16 && y < targetY+16 && targetY < y+16);
+   return (player.isCollision(targetX)&&target.isCollision(player))&&(x < targetX+16 && targetX < x +16 && y < targetY+16 && targetY < y+16);
   },
   /**
    * コマンドをpushする関数
@@ -134,6 +137,13 @@ var Character=enchant.Class.create(enchant.Sprite,{
     this.queue.shift();
    }
   },
+  /**
+   * 衝突判定をするか
+   * @returns {Boolean} 衝突判定をするかどうか
+   */
+  isCollision: function(){
+   return true;
+  },
   mapX: {
    get: function(){
     return (this.x+this.offsetX)/16;
@@ -143,7 +153,7 @@ var Character=enchant.Class.create(enchant.Sprite,{
    get: function(){
     return (this.y+this.offsetY)/16;
    },
-  }
+  },
 });
 
 /**
@@ -227,7 +237,18 @@ var CharactersList=enchant.Class.create(enchant.Group,{
   }
 });
 
+/**
+ * @scope MapScene.prototype
+ */
 var MapScene=enchant.Class.create(enchant.Scene,{
+  /**
+   * @name MapScene
+   * @class マップや必要情報をシーンに内包させてpopScene/pushSceneと言った形式で扱えるようにしたもの
+   * @param {Player} player プレイヤーオブジェクト
+   * @param {enchant.Map} bgMap 背景/衝突判定マップ
+   * @param {enchant.Map} fgMap 前景アップ
+   * @extends enchant.Scene
+   */
   initialize:function(player,bgMap,fgMap){
    enchant.Scene.call(this);
    // this.objList=new Group();
@@ -235,19 +256,29 @@ var MapScene=enchant.Class.create(enchant.Scene,{
    this.bgMap=bgMap;
    this.fgMap=fgMap || null;
    this.player=player;
+   this.lbl=new MutableText(0,0,game.width);
+   this.sumFPS=0;
    this.addChild(this.bgMap);
    this.addChild(this.characterList);
    if(this.fgMap){
     this.addChild(this.fgMap);
    }
+   this.addChild(this.lbl);
    this.addEventListener('enterframe',function(e){
+    this.enterframe();
     this.focusToPlayer();
    });
    this.addCharacters(this.player);
   },
+  /**
+   * キャラクターの追加
+   */
   addCharacters: function(character){
    this.characterList.addChild(character);
   },
+  /**
+   * プレイヤーを中心としてマップを移動する
+   */
   focusToPlayer: function(player){
    var x,y;
    var player=this.player;
@@ -272,16 +303,14 @@ var MapScene=enchant.Class.create(enchant.Scene,{
    this.bgMap.y=y;
    this.characterList.x=x;
    this.characterList.y=y;
-  }
-  /*
+  },
   enterframe: function(e){
    // FPS計算
-   sumFPS+=game.actualFps;
+   this.sumFPS+=game.actualFps;
    if(game.frame%10==0){
-    this.lbl.setText(""+Math.round(sumFPS/10));
-    sumFPS=0;
+    this.lbl.setText(""+Math.round(this.sumFPS/10));
+    this.sumFPS=0;
    }
    this.characterList.sortY();
   }
-  */
 });
