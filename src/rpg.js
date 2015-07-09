@@ -168,46 +168,6 @@ $(function(){
  game.debug();
 });
 
-var Player=enchant.Class.create(Character,{
-  initialize: function(x,y,offsetX,offsetY){
-   Character.call(this,x,y,offsetX,offsetY);
-   this.baseVelocity=4;
-  },
-  thinkingRountine:function(){
-   this.pushCommand(new this.waitInput(this,{}));
-  },
-  // 入力待機
-  waitInput:enchant.Class.create(Command,{
-    cmdName: "!player.waitInput",
-    action:function(){
-     var direction;
-     if(game.input.left){
-      direction=1;
-     }else if(game.input.right){
-      direction=2;
-     }else if(game.input.up){
-      direction=3;
-     }else if(game.input.down){
-      direction=0;
-     }
-     if(direction!==undefined){
-      this.owner.pushCommand('walk',{direction: direction});
-      // 滑らかに動かすために1度actionを実行する
-      if(this.owner.queue[1]!==undefined){
-       this.owner.queue[1].action();
-      }
-     }
-    },
-    popFlag:function(){
-     return (typeof this.owner.queue[1] !=="undefined");
-    }
-  }),
-  // 引き継ぎ用のステータスを返す関数
-  takeOver: function(){
-   return {}
-  }
-});
-
 var MoveBot=enchant.Class.create(Character,{
   initialize: function(x,y,offsetX,offsetY){
    Character.call(this,x,y,offsetX,offsetY);
@@ -221,7 +181,7 @@ var MoveBot=enchant.Class.create(Character,{
     this.moveIndex=0;
    }
   },
-  thinkingRountine: function(){
+  thinkingRoutine: function(){
    if(this.preX==this.x && this.preY==this.y){
     this.moveIndex=(this.moveIndex+1)%this.moveArr.length;
     this.direction=this.moveArr[this.moveIndex];
@@ -243,7 +203,7 @@ var Spike=enchant.Class.create(Character,{
    console.log(img);
    this.image=img;
    this.state=false;
-   this.frame=0;
+   this.frame=1;
   },
   toggle_on_off: enchant.Class.create(Command,{
     cmdName: "!spike.toggle_on_off",
@@ -263,9 +223,9 @@ var Spike=enchant.Class.create(Character,{
   isCollision: function(){
    return this.state;
   },
-  thinkingRountine: function(){
-   this.pushCommand('wait',{count: 2*game.fps});
+  thinkingRoutine: function(){
    this.pushCommand(new this.toggle_on_off(this,{}));
+   this.pushCommand('wait',{count: 2*game.fps});
   }
 });
 
@@ -323,7 +283,6 @@ function termCommands(){
      self=this;
     }
     i++;
-    console.log(self.get_command());
     self.echo(i);
     if(i<5){
      setTimeout(arguments.callee,1000,self);

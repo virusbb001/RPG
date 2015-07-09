@@ -251,7 +251,6 @@ var MapScene=enchant.Class.create(enchant.Scene,{
    */
   initialize:function(player,bgMap,fgMap){
    enchant.Scene.call(this);
-   // this.objList=new Group();
    this.characterList=new CharactersList();
    this.bgMap=bgMap;
    this.fgMap=fgMap || null;
@@ -314,3 +313,48 @@ var MapScene=enchant.Class.create(enchant.Scene,{
    this.characterList.sortY();
   }
 });
+
+/**
+ * @scope Player.prototype
+ */
+
+var Player=enchant.Class.create(Character,{
+  initialize: function(x,y,offsetX,offsetY){
+   Character.call(this,x,y,offsetX,offsetY);
+   this.baseVelocity=4;
+  },
+  thinkingRountine:function(){
+   this.pushCommand(new this.waitInput(this,{}));
+  },
+  // 入力待機
+  waitInput:enchant.Class.create(Command,{
+    cmdName: "!player.waitInput",
+    action:function(){
+     var direction;
+     if(game.input.left){
+      direction=1;
+     }else if(game.input.right){
+      direction=2;
+     }else if(game.input.up){
+      direction=3;
+     }else if(game.input.down){
+      direction=0;
+     }
+     if(direction!==undefined){
+      this.owner.pushCommand('walk',{direction: direction});
+      // 滑らかに動かすために1度actionを実行する
+      if(this.owner.queue[1]!==undefined){
+       this.owner.queue[1].action();
+      }
+     }
+    },
+    popFlag:function(){
+     return (typeof this.owner.queue[1] !=="undefined");
+    }
+  }),
+  // 引き継ぎ用のステータスを返す関数
+  takeOver: function(){
+   return {}
+  }
+});
+
