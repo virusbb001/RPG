@@ -116,7 +116,7 @@ addCommand('think',{
    this.executed=false;
   },
   action:function(){
-   this.owner.thinkingRountine();
+   this.owner.thinkingRoutine();
    this.executed=true;
   },
   popFlag:function(){

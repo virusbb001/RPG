@@ -66,7 +66,7 @@ var Character=enchant.Class.create(enchant.Sprite,{
    * スタックが空になれば実行される
    * 任意のタイミングで呼び出しても構わない
    */
-  thinkingRountine: function(){
+  thinkingRoutine: function(){
   },
   /**
    * intersectだと実際の当たり判定での判定が出来ないためこの関数で衝突判定を行う
@@ -323,7 +323,7 @@ var Player=enchant.Class.create(Character,{
    Character.call(this,x,y,offsetX,offsetY);
    this.baseVelocity=4;
   },
-  thinkingRountine:function(){
+  thinkingRoutine:function(){
    this.pushCommand(new this.waitInput(this,{}));
   },
   // 入力待機
