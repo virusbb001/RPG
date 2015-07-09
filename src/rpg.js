@@ -1,4 +1,4 @@
-var game,player,backgroundMap,mob,commands,mob2;
+var game,player,backgroundMap,mob,commands,mob2,spike;
 var map_start;
 var sumFPS=0;
 var pause_scene,pause_text;
@@ -131,14 +131,17 @@ $(function(){
   mob.image=mobImage;
   mob2.image=mobImage;
 
+  // スパイク
+  spike=new Spike(2,2);
+
   // マップシーン
   map_start=new MapScene(player,backgroundMap);
   map_start.addCharacters(mob);
   map_start.addCharacters(mob2);
+  map_start.addCharacters(spike);
 
   game.rootScene.backgroundColor="#000000";
   game.pushScene(map_start);
-  // game.rootScene.addChild(lbl);
   /*
   game.rootScene.addEventListener('enterframe',function(e){
    // FPS計算
@@ -175,7 +178,7 @@ var Player=enchant.Class.create(Character,{
   },
   // 入力待機
   waitInput:enchant.Class.create(Command,{
-    cmdName: "player.waitInput",
+    cmdName: "!player.waitInput",
     action:function(){
      var direction;
      if(game.input.left){
@@ -232,6 +235,40 @@ var MoveBot=enchant.Class.create(Character,{
   }
 });
 
+var Spike=enchant.Class.create(Character,{
+  initialize: function(x,y){
+   Character.call(this,x,y,0,0,16,16);
+   var img=new Surface(32,16);
+   img.draw(game.assets['images/map1.png'],11*16,2*16,32,16,0,0,32,16);
+   console.log(img);
+   this.image=img;
+   this.state=false;
+   this.frame=0;
+  },
+  toggle_on_off: enchant.Class.create(Command,{
+    cmdName: "!spike.toggle_on_off",
+    initialize: function(owner,properties){
+     Command.call(this,owner,properties);
+     this.executed=false;
+    },
+    action: function(){
+     this.owner.state=!this.owner.state;
+     this.owner.frame=(this.owner.state)?0:1;
+     this.executed=true;
+    },
+    popFlag: function(){
+     return this.executed;
+    }
+  }),
+  isCollision: function(){
+   return this.state;
+  },
+  thinkingRountine: function(){
+   this.pushCommand('wait',{count: 2*game.fps});
+   this.pushCommand(new this.toggle_on_off(this,{}));
+  }
+});
+
 function getGameObj(){
  return game;
 }
@@ -240,7 +277,8 @@ function termCommands(){
  var data={
   player: player,
   mob:mob,
-  mob2: mob2
+  mob2: mob2,
+  spike: spike
  };
  var termObj={
   objs: function(){
