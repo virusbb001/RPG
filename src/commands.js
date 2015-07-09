@@ -1,3 +1,5 @@
+// ゲーム用コマンド
+
 commands={};
 function addCommand(name,definition){
  if(commands[name]){
