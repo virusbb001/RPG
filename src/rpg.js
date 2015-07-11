@@ -89,7 +89,7 @@ $(function(){
    [0,0,1,1,1,1,1,1,0,0]
   ];
 
-  player=new Player(1,1,8,16);
+  player=new Player(1,1);
   // 8ずらすことでキャラをマップ座標に居るように見せている
   var image=new Surface(96,128);
   image.draw(game.assets['images/chara0.png'],0,0,96,128,0,0,96,128);
@@ -111,8 +111,8 @@ $(function(){
   player.image=image;
   // characterList.addChild(player);
 
-  mob = new MoveBot(0,0,8,16);
-  mob2= new MoveBot(0,1,8,16);
+  mob = new MoveBot(0,0);
+  mob2= new MoveBot(0,1);
   mobImage=new Surface(96,128);
   for(i=0;i<12;i++){
    var x,y;
@@ -166,33 +166,6 @@ $(function(){
   toggle_pause();
  });
  game.debug();
-});
-
-var MoveBot=enchant.Class.create(Character,{
-  initialize: function(x,y,offsetX,offsetY){
-   Character.call(this,x,y,offsetX,offsetY);
-   this.baseVelocity=1;
-   this.direction=2;
-   this.preX=undefined;
-   this.preY=undefined;
-   this.moveArr=[3,1,0,2].reverse();
-   this.moveIndex=this.moveArr.indexOf(this.direction);
-   if(this.moveIndex<0){
-    this.moveIndex=0;
-   }
-  },
-  thinkingRoutine: function(){
-   if(this.preX==this.x && this.preY==this.y){
-    this.moveIndex=(this.moveIndex+1)%this.moveArr.length;
-    this.direction=this.moveArr[this.moveIndex];
-    this.pushCommand('wait',{count:30});
-    this.pushCommand('walk',{direction: this.direction});
-   }else{
-    this.pushCommand('walk',{direction: this.direction});
-   }
-   this.preX=this.x;
-   this.preY=this.y;
-  }
 });
 
 var Spike=enchant.Class.create(Character,{

@@ -256,6 +256,33 @@ var Player=enchant.Class.create(Human,{
   }
 });
 
+var MoveBot=enchant.Class.create(Human,{
+  initialize: function(x,y){
+   Human.call(this,x,y);
+   this.baseVelocity=1;
+   this.direction=2;
+   this.preX=undefined;
+   this.preY=undefined;
+   this.moveArr=[3,1,0,2].reverse();
+   this.moveIndex=this.moveArr.indexOf(this.direction);
+   if(this.moveIndex<0){
+    this.moveIndex=0;
+   }
+  },
+  thinkingRoutine: function(){
+   if(this.preX==this.x && this.preY==this.y){
+    this.moveIndex=(this.moveIndex+1)%this.moveArr.length;
+    this.direction=this.moveArr[this.moveIndex];
+    this.pushCommand('wait',{count:30});
+    this.pushCommand('walk',{direction: this.direction});
+   }else{
+    this.pushCommand('walk',{direction: this.direction});
+   }
+   this.preX=this.x;
+   this.preY=this.y;
+  }
+});
+
 
 /**
  * @scope CharactersList.prototype
