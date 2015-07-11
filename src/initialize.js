@@ -316,9 +316,19 @@ var MapScene=enchant.Class.create(enchant.Scene,{
  */
 
 var Player=enchant.Class.create(Character,{
+  /**
+   * @name Player
+   * @class プレイヤー用オブジェクト
+   * @extends Character
+   */
   initialize: function(x,y,offsetX,offsetY){
    Character.call(this,x,y,offsetX,offsetY);
    this.baseVelocity=4;
+   /**
+    * 体力
+    * @type Number
+    */
+   this.hp=20;
   },
   thinkingRoutine:function(){
    this.pushCommand(new this.waitInput(this,{}));
