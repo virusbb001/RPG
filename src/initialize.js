@@ -1,6 +1,43 @@
 enchant('ui');
 
 /**
+ * @scope Command.prototype
+ */
+var Command=enchant.Class.create({
+  /**
+   * @name Command
+   * @class コマンドのオブジェクト
+   * @param {Character} owner 実行者
+   * @param {Object} properties プロパティ
+   */
+  initialize:function(owner,properties){
+   // 実行者
+   this.owner=owner;
+   // 実行時のプロパティ
+   this.properties=properties;
+   this.actioning=false;
+  },
+  /**
+   * コマンド削除フラグ
+   * 追加時にも判定され、真であれば追加されない
+   * @returns {Boolean} 削除すべきかどうか
+   */
+  popFlag: function(){
+   return true;
+  },
+  /**
+   * 1フレームごとに行う動作
+   * ownerのenterframeイベントの時に実行される
+   */
+  action: function(){
+  },
+  /**
+   * 表示用の名前
+   */
+  cmdName: null
+});
+
+/**
  * @scope Character.prototype
  */
 var Character=enchant.Class.create(enchant.Sprite,{
