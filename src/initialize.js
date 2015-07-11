@@ -154,6 +154,72 @@ var Character=enchant.Class.create(enchant.Sprite,{
 });
 
 /**
+ * @scope Humans
+ */
+var Humans=enchant.Class.create(Character,{
+  /**
+   * @name Humans
+   * @class images/chara*.pngの仕様に合わせたCharacterクラス
+   */
+  initialize: function(x,y){
+   Character.call(this,x,y,8,16);
+  },
+});
+
+/**
+ * @scope Player.prototype
+ */
+var Player=enchant.Class.create(Humans,{
+  /**
+   * @name Player
+   * @class プレイヤー用オブジェクト
+   * @extends Character
+   */
+  initialize: function(x,y){
+   Humans.call(this,x,y);
+   this.baseVelocity=4;
+   /**
+    * 体力
+    * @type Number
+    */
+   this.hp=20;
+  },
+  thinkingRoutine:function(){
+   this.pushCommand(new this.waitInput(this,{}));
+  },
+  // 入力待機
+  waitInput:enchant.Class.create(Command,{
+    cmdName: "!player.waitInput",
+    action:function(){
+     var direction;
+     if(game.input.left){
+      direction=1;
+     }else if(game.input.right){
+      direction=2;
+     }else if(game.input.up){
+      direction=3;
+     }else if(game.input.down){
+      direction=0;
+     }
+     if(direction!==undefined){
+      this.owner.pushCommand('walk',{direction: direction});
+      // 滑らかに動かすために1度actionを実行する
+      if(this.owner.queue[1]!==undefined){
+       this.owner.queue[1].action();
+      }
+     }
+    },
+    popFlag:function(){
+     return (typeof this.owner.queue[1] !=="undefined");
+    }
+  }),
+  // 引き継ぎ用のステータスを返す関数
+  takeOver: function(){
+   return {}
+  }
+});
+
+/**
  * @scope Command.prototype
  */
 var Command=enchant.Class.create({
@@ -308,73 +374,6 @@ var MapScene=enchant.Class.create(enchant.Scene,{
     this.sumFPS=0;
    }
    this.characterList.sortY();
-  }
-});
-
-/**
- * @scope Humans
- */
-var Humans=enchant.Class.create(Character,{
-  /**
-   * @name Humans
-   * @class images/chara*.pngの仕様に合わせたCharacterクラス
-   */
-  initialize: function(x,y){
-   Character.call(this,x,y,8,16);
-  },
-});
-
-/**
- * @scope Player.prototype
- */
-
-var Player=enchant.Class.create(Character,{
-  /**
-   * @name Player
-   * @class プレイヤー用オブジェクト
-   * @extends Character
-   */
-  initialize: function(x,y,offsetX,offsetY){
-   Character.call(this,x,y,offsetX,offsetY);
-   this.baseVelocity=4;
-   /**
-    * 体力
-    * @type Number
-    */
-   this.hp=20;
-  },
-  thinkingRoutine:function(){
-   this.pushCommand(new this.waitInput(this,{}));
-  },
-  // 入力待機
-  waitInput:enchant.Class.create(Command,{
-    cmdName: "!player.waitInput",
-    action:function(){
-     var direction;
-     if(game.input.left){
-      direction=1;
-     }else if(game.input.right){
-      direction=2;
-     }else if(game.input.up){
-      direction=3;
-     }else if(game.input.down){
-      direction=0;
-     }
-     if(direction!==undefined){
-      this.owner.pushCommand('walk',{direction: direction});
-      // 滑らかに動かすために1度actionを実行する
-      if(this.owner.queue[1]!==undefined){
-       this.owner.queue[1].action();
-      }
-     }
-    },
-    popFlag:function(){
-     return (typeof this.owner.queue[1] !=="undefined");
-    }
-  }),
-  // 引き継ぎ用のステータスを返す関数
-  takeOver: function(){
-   return {}
   }
 });
 
