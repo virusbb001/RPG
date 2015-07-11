@@ -210,7 +210,7 @@ var Player=enchant.Class.create(Human,{
   /**
    * @name Player
    * @class プレイヤー用オブジェクト
-   * @extends Character
+   * @extends Human
    */
   initialize: function(x,y){
    Human.call(this,x,y);
@@ -224,7 +224,10 @@ var Player=enchant.Class.create(Human,{
   thinkingRoutine:function(){
    this.pushCommand(new this.waitInput(this,{}));
   },
-  // 入力待機
+  /**
+   * 入力待機用コマンド
+   * @type Command
+   */
   waitInput:enchant.Class.create(Command,{
     cmdName: "!player.waitInput",
     action:function(){
@@ -250,13 +253,24 @@ var Player=enchant.Class.create(Human,{
      return (typeof this.owner.queue[1] !=="undefined");
     }
   }),
-  // 引き継ぎ用のステータスを返す関数
+  /**
+   * 別マップからオブジェクトを移行するためのオブジェクト
+   * @returns {Object} 引き継ぎ用オブジェクト
+   */
   takeOver: function(){
    return {}
   }
 });
 
+/**
+ * @scope MoveBot.prototype
+ */
 var MoveBot=enchant.Class.create(Human,{
+  /**
+   * @name MoveBot
+   * @class 壁にぶつかったら向きを変えて歩くキャラクター
+   * @extends Human
+   */
   initialize: function(x,y){
    Human.call(this,x,y);
    this.baseVelocity=1;
