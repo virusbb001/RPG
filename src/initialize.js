@@ -312,6 +312,19 @@ var MapScene=enchant.Class.create(enchant.Scene,{
 });
 
 /**
+ * @scope Humans
+ */
+var Humans=enchant.Class.create(Character,{
+  /**
+   * @name Humans
+   * @class images/chara*.pngの仕様に合わせたCharacterクラス
+   */
+  initialize: function(x,y){
+   Character.call(this,x,y,8,16);
+  },
+});
+
+/**
  * @scope Player.prototype
  */
 
