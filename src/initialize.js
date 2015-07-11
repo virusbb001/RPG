@@ -191,11 +191,11 @@ var Character=enchant.Class.create(enchant.Sprite,{
 });
 
 /**
- * @scope Humans
+ * @scope Human
  */
-var Humans=enchant.Class.create(Character,{
+var Human=enchant.Class.create(Character,{
   /**
-   * @name Humans
+   * @name Human
    * @class images/chara*.pngの仕様に合わせたCharacterクラス
    */
   initialize: function(x,y){
@@ -206,14 +206,14 @@ var Humans=enchant.Class.create(Character,{
 /**
  * @scope Player.prototype
  */
-var Player=enchant.Class.create(Humans,{
+var Player=enchant.Class.create(Human,{
   /**
    * @name Player
    * @class プレイヤー用オブジェクト
    * @extends Character
    */
   initialize: function(x,y){
-   Humans.call(this,x,y);
+   Human.call(this,x,y);
    this.baseVelocity=4;
    /**
     * 体力
