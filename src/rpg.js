@@ -200,7 +200,6 @@ var Spike=enchant.Class.create(Character,{
    Character.call(this,x,y,0,0,16,16);
    var img=new Surface(32,16);
    img.draw(game.assets['images/map1.png'],11*16,2*16,32,16,0,0,32,16);
-   console.log(img);
    this.image=img;
    this.state=false;
    this.frame=1;
