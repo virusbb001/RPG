@@ -101,7 +101,6 @@ var Character=enchant.Class.create(enchant.Sprite,{
   },
   /**
    * コマンドをpushする関数
-   * 但し、作成時に既にpopFlagが真であれば追加しない
    * @param {String|Command} command commandsに登録されているコマンドかcommandオブジェクト
    * @param {Object} properties commandsに追加するためのプロパティ
    */
@@ -115,10 +114,8 @@ var Character=enchant.Class.create(enchant.Sprite,{
    if(act == undefined){
     return;
    }
+   this.queue.push(act);
    if(act.popFlag()){
-    delete act;
-   }else{
-    this.queue.push(act);
    }
   },
   /**
