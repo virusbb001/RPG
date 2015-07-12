@@ -191,7 +191,7 @@ var Character=enchant.Class.create(enchant.Sprite,{
 });
 
 /**
- * @scope Human
+ * @scope Human.prototype
  */
 var Human=enchant.Class.create(Character,{
   /**
