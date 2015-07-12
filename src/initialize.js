@@ -337,7 +337,7 @@ var CharactersList=enchant.Class.create(enchant.Group,{
    */
   sortY:function(){
    this.childNodes.sort(function(a,b){
-    return a.y-b.y;
+    return a.mapY-b.mapY;
    });
   }
 });
