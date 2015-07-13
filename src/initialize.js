@@ -265,6 +265,20 @@ var Player=enchant.Class.create(Human,{
 });
 
 /**
+ * @scope MapChip.prototype
+ */
+var MapChip=enchant.Class.create(Character,{
+  /**
+   * @name MapChip
+   * @class マップチップのように振る舞うキャラクター
+   * @extends Character
+   */
+  initialize:function(x,y){
+   Character.call(this,x,y,0,0,16,16);
+  }
+});
+
+/**
  * @scope MoveBot.prototype
  */
 var MoveBot=enchant.Class.create(Human,{

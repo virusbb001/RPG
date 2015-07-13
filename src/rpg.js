@@ -168,7 +168,7 @@ $(function(){
  game.debug();
 });
 
-var Spike=enchant.Class.create(Character,{
+var Spike=enchant.Class.create(MapChip,{
   initialize: function(x,y){
    Character.call(this,x,y,0,0,16,16);
    var img=new Surface(32,16);
