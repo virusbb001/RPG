@@ -224,14 +224,14 @@ var Player=enchant.Class.create(Human,{
    this.hp=20;
   },
   thinkingRoutine:function(){
-   this.pushCommand(new this.waitInput(this,{}));
+   this.pushCommand(new this.walkInput(this,{}));
   },
   /**
    * 入力待機用コマンド
    * @type Command
    */
-  waitInput:enchant.Class.create(Command,{
-    cmdName: "!player.waitInput",
+  walkInput:enchant.Class.create(Command,{
+    cmdName: "!player.walkInput",
     action:function(){
      var direction;
      if(game.input.left){
