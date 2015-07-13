@@ -48,11 +48,13 @@ var Character=enchant.Class.create(enchant.Sprite,{
    * @param {Integer} y マップY座標
    * @param {Integer} offsetX 実際の当たり判定がxからどのくらいX軸方向離れているか
    * @param {Integer} offsetY 実際の当たり判定がyからどのくらいY軸方向離れているか
+   * @param {Integer} width 実際の当たり判定がyからどのくらいY軸方向離れているか
+   * @param {Integer} height 実際の当たり判定がyからどのくらいY軸方向離れているか
    * @extends enchant.Sprite
    */
   initialize: function(x,y,offsetX,offsetY,width,height){
-   var width=width||32;
-   var height=height||32;
+   var width=width;
+   var height=height;
    enchant.Sprite.call(this,width,height);
    /**
     * 実際の当たり判定がxからどのくらいX軸方向離れているか
@@ -199,7 +201,7 @@ var Human=enchant.Class.create(Character,{
    * @class images/chara*.pngの仕様に合わせたCharacterクラス
    */
   initialize: function(x,y){
-   Character.call(this,x,y,8,16);
+   Character.call(this,x,y,8,16,32,32);
   },
 });
 
