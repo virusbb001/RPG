@@ -139,7 +139,7 @@ $(function(){
   // マップシーン
   map_start=new MapScene(player,backgroundMap);
   map_start.addCharacters(mob);
-  map_start.addCharacters(mob2);
+  // map_start.addCharacters(mob2);
   map_start.addCharacters(spike);
 
   game.rootScene.backgroundColor="#000000";
