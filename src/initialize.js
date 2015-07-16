@@ -178,10 +178,11 @@ var Character=enchant.Class.create(enchant.Sprite,{
    }
   },
   /**
-   * 衝突判定をするか
+   * 対象に対して衝突判定をするか
+   * @param {Character} target 対象
    * @returns {Boolean} 衝突判定をするかどうか
    */
-  isCollision: function(){
+  isCollision: function(target){
    return true;
   },
   mapX: {
