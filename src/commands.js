@@ -91,6 +91,9 @@ addCommand('walk',{
   },
   popFlag: function(){
    return !this.isMoving;
+  },
+  toString: function(){
+   return this.cmdName+" direction is "+(["down","left","right","up"])[this.direction];
   }
 });
 
