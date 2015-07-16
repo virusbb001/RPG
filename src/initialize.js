@@ -34,7 +34,11 @@ var Command=enchant.Class.create({
   /**
    * 表示用の名前
    */
-  cmdName: null
+  cmdName: null,
+  toString: function(){
+   var str=this.cmdName;
+   return str;
+  }
 });
 
 /**
