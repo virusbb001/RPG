@@ -170,39 +170,6 @@ $(function(){
  game.debug();
 });
 
-var Spike=enchant.Class.create(MapChip,{
-  initialize: function(x,y){
-   Character.call(this,x,y,0,0,16,16);
-   var img=new Surface(32,16);
-   img.draw(game.assets['images/map1.png'],11*16,2*16,32,16,0,0,32,16);
-   this.image=img;
-   this.state=false;
-   this.frame=1;
-  },
-  toggle_on_off: enchant.Class.create(Command,{
-    cmdName: "!spike.toggle_on_off",
-    initialize: function(owner,properties){
-     Command.call(this,owner,properties);
-     this.executed=false;
-    },
-    action: function(){
-     this.owner.state=!this.owner.state;
-     this.owner.frame=(this.owner.state)?0:1;
-     this.executed=true;
-    },
-    popFlag: function(){
-     return this.executed;
-    }
-  }),
-  isCollision: function(){
-   return this.state;
-  },
-  thinkingRoutine: function(){
-   this.pushCommand(new this.toggle_on_off(this,{}));
-   this.pushCommand('wait',{count: 2*game.fps});
-  }
-});
-
 function getGameObj(){
  return game;
 }
