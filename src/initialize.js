@@ -257,6 +257,7 @@ var Player=enchant.Class.create(Human,{
      }
     },
     popFlag:function(){
+     // 次のコマンドが決まればpop
      return (typeof this.owner.queue[1] !=="undefined");
     }
   }),
