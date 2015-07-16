@@ -318,6 +318,76 @@ var MoveBot=enchant.Class.create(Human,{
   }
 });
 
+/**
+ * @scope Spike.prototype
+ */
+var Spike=enchant.Class.create(MapChip,{
+  /**
+   * @name Spike
+   * @class トゲクラス onの時に通れずoffの時に通れる
+   * @extends MapChip
+   */
+  initialize: function(x,y){
+   MapChip.call(this,x,y);
+   var img=new Surface(32,16);
+   img.draw(game.assets['images/map1.png'],11*16,2*16,32,16,0,0,32,16);
+   this.image=img;
+   this.state=false;
+   this.frame=1;
+  },
+  /**
+   * SpikeのstateをOn/Offするクラス
+   */
+  toggle_on_off: enchant.Class.create(Command,{
+    cmdName: "!spike.toggle_on_off",
+    initialize: function(owner,properties){
+     Command.call(this,owner,properties);
+     this.executed=false;
+    },
+    action: function(){
+     this.owner.state=!this.owner.state;
+     this.owner.frame=(this.owner.state)?0:1;
+     this.executed=true;
+    },
+    popFlag: function(){
+     return this.executed;
+    }
+  }),
+  isCollision: function(){
+   return this.state;
+  },
+  thinkingRoutine: function(){
+   this.pushCommand(new this.toggle_on_off(this,{}));
+   this.pushCommand('wait',{count: 4+4*(this.state?0:10)});
+  }
+});
+
+/**
+ * @scope Stair.prototype
+ */
+var Stair=enchant.Class.create(MapChip,{
+  /**
+   * @name Stair
+   * @class 階段(ワープ)クラス
+   * @extends MapChip
+   */
+  initialize: function(x,y){
+   MapChip.call(x,y);
+   this.pushCommand(this.jumpOnChar,{});
+  },
+  jumpOnChar: enchant.Class.create(Command,{
+    cmdName: "!stair.jumpOnChar",
+    initialize:function(owner,properties){
+     Command.call(this,owner,properties);
+    },
+    action: function(){
+    },
+    popFlag: function(){
+     return false;
+    }
+  })
+});
+
 
 /**
  * @scope CharactersList.prototype
