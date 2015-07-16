@@ -9,6 +9,7 @@ var paused=false;
 function toggle_pause(){
  var message_list=
   ([
+//   "HELP",
    "GAME PAUSED",
    "LOL U DIED",
    "DISCONNECTED",
@@ -22,6 +23,7 @@ function toggle_pause(){
    "TOO COLD",
    "PING",
    "QUEUE",
+   "FORGIVE ME"
   ]).filter(function(val,index,arr){
    return val.length<=(game.width/16);
   });
