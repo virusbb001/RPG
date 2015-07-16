@@ -425,10 +425,17 @@ var CharactersList=enchant.Class.create(enchant.Group,{
   },
   /**
    * yが小さい順位ソートして見栄えを良くする
+   * もしCharacterとMapChipの比較だった場合、MapChipを背面にする
    */
   sortY:function(){
    this.childNodes.sort(function(a,b){
-    return a.mapY-b.mapY;
+    var ret=a.mapY-b.mapY;
+    if(ret==0){
+     var a_sort=(a instanceof MapChip)? -1 : 1;
+     var b_sort=(b instanceof MapChip)? -1 : 1;
+     ret=a_sort-b_sort;
+    }
+    return ret;
    });
   }
 });
