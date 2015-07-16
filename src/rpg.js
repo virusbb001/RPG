@@ -212,8 +212,8 @@ function termCommands(){
   },
   queue: function(){
    var self=this;
-   player.queue.forEach(function(cmd){
-    self.echo(cmd.cmdName);
+   player.queue.forEach(function(cmd,index){
+    self.echo(index+" : "+cmd.toString());
    });
   },
   setTimeoutTest: (function(){
