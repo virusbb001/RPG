@@ -143,6 +143,17 @@ var Character=enchant.Class.create(enchant.Sprite,{
    return (player.isCollision(targetX)&&target.isCollision(player))&&(x < targetX+16 && targetX < x +16 && y < targetY+16 && targetY < y+16);
   },
   /**
+   * mapX,mapYのみの比較のみで当たり判定を行う関数
+   * mapX,mapYを取得し両方共同値であればtrue
+   * @param {Character} target 衝突判定をする対象
+   * @param {Object} [option={}] 衝突判定のオプション
+   * @returns {Boolean} 重なっているか否か
+   */
+  compareMapPos: function(target,option){
+   var option=option||{};
+   return this.mapX==target.mapX&&this.mapY==target.mapY;
+  },
+  /**
    * コマンドをpushする関数
    * @param {String|Command} command commandsに登録されているコマンドかcommandオブジェクト
    * @param {Object} properties commandsに追加するためのプロパティ
