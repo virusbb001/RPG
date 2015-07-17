@@ -470,7 +470,9 @@ var MapScene=enchant.Class.create(enchant.Scene,{
    this.bgMap=bgMap;
    this.fgMap=fgMap || null;
    this.player=player;
+   //  FPS表示用
    this.lbl=new MutableText(0,0,game.width);
+   this.hpLabel=new MutableText(0,16,game.width);
    this.sumFPS=0;
    this.addChild(this.bgMap);
    this.addChild(this.characterList);
@@ -478,6 +480,7 @@ var MapScene=enchant.Class.create(enchant.Scene,{
     this.addChild(this.fgMap);
    }
    this.addChild(this.lbl);
+   this.addChild(this.hpLabel);
    this.addEventListener('enterframe',function(e){
     this.enterframe();
     this.focusToPlayer();
@@ -525,7 +528,10 @@ var MapScene=enchant.Class.create(enchant.Scene,{
     this.lbl.setText(""+Math.round(this.sumFPS/10));
     this.sumFPS=0;
    }
+   // ソート
    this.characterList.sortY();
+   // HP表示
+   this.hpLabel.setText("HP:"+this.player.hp);
   }
 });
 
