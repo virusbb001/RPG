@@ -417,6 +417,7 @@ var CharactersList=enchant.Class.create(enchant.Group,{
    * @param {Object} [options={}] checkHitに対するオプション
    * @param {Integer} [options.maxLength=-1] TODO: 何個見つけたら判定を終了するか
    * @param {Object} [hitTestOptions={}]  それぞれのhitTestに渡すオプション
+   * @param {String|Function} [hitTestOptions.checkFunc} 衝突判定に使う関数 引数は(対象, オプション) オプションはhitTestと同一 文字列型の場合はcheckerのメソッドを参照する
    * @returns {Character []} 衝突していると判定されたキャラクターのリスト
    */
   checkHit: function(checker,options,hitTestOptions){
@@ -424,8 +425,8 @@ var CharactersList=enchant.Class.create(enchant.Group,{
    var nodes=this.childNodes;
    var hitOpt=hitTestOptions || {};
    var opts=options || {};
-   // var maxLength=opts.maxLength||-1;
-   for(i=0;i<nodes.length /* && (maxLength < 0 || hits.length<=maxLength) */;i++){
+   var maxLength=opts.maxLength||-1;
+   for(i=0;i<nodes.length && (maxLength < 0 || hits.length<=maxLength);i++){
     if(nodes[i]===checker){
      continue;
     }
