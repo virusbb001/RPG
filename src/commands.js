@@ -87,7 +87,7 @@ addCommand('walk',{
    var x=this.owner.x + (this.vx ? this.vx/Math.abs(this.vx)*16: 0) + this.owner.offsetX;
    var y=this.owner.y + (this.vy ? this.vy/Math.abs(this.vy)*16: 0) + this.owner.offsetY;
    var opts={x:x-this.owner.offsetX,y:y-this.owner.offsetY};
-   return (0<=x && x< backgroundMap.width && 0<=y && y<backgroundMap.height && !backgroundMap.hitTest(x,y) && characterList.checkHit(this.owner,{},opts).length==0);
+   return (0<=x && x< backgroundMap.width && 0<=y && y<backgroundMap.height && !backgroundMap.hitTest(x,y) && characterList.checkHit(this.owner,{maxLength:1},opts).length==0);
   },
   popFlag: function(){
    return !this.isMoving;
