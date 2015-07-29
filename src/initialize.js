@@ -272,6 +272,45 @@ var Player=enchant.Class.create(Human,{
      return (typeof this.owner.queue[1] !=="undefined");
     }
   }),
+  /*
+   * {String|Array} properties.messagesは必須
+   */
+  waitMessage:enchant.Class.create(Command,{
+    initialize: function(owner,properties){
+     if ( !(properties!=undefined && properties.messages!=undefined)){
+      throw(new Error("missing property: messages"));
+     }
+     var messages=properties.messages;
+     if(!(messages instanceof Array)){
+      messages=[messages.toString()];
+     }
+     this.messages=messages;
+     this.mes_win=new MessageWindow();
+     this.mes_win.set_message(this.messages[0]);
+     this.flag=true;
+    },
+    action: function(){
+     if(!this.mes_win.parentNode){
+      this.mes_win.toggle_show();
+     }
+     if(game.input.Z){
+      if(this.flag){
+       this.messages.shift();
+       if(this.messages[0]){
+        this.mes_win.set_message(this.messages[0]);
+       }else{
+        this.mes_win.toggle_show();
+       }
+       this.flag=false;
+      }
+     }else{
+      this.flag=true;
+     }
+    },
+    popFlag: function(){
+     return (this.messages.length==0)
+    }
+  }),
   /**
    * 別マップからオブジェクトを移行するためのオブジェクト
    * @returns {Object} 引き継ぎ用オブジェクト
