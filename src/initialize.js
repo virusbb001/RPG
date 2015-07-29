@@ -536,3 +536,66 @@ var MapScene=enchant.Class.create(enchant.Scene,{
   }
 });
 
+/**
+ * @scope MessageWindow.prototype
+ */
+var MessageWindow=enchant.Class.create(enchant.Group,{
+  /**
+   * @name MessageWindow
+   * @class メッセージを表示させるクラス
+   * @param {Integer} x 表示させるx座標
+   * @param {Integer} y 表示させるy座標
+   * @extends enchant.Group
+   */
+  initialize: function(x,y){
+   enchant.Group.call(this);
+   this.bg=new Sprite(game.width,game.height);
+   this.bg.backgroundColor="#ffffff";
+   this.label=new Label();
+   this.label.font='16px Osaka-mono, "Osaka-等幅", "MS ゴシック",monospace';
+   this.addChild(this.bg);
+   this.addChild(this.label);
+   this.shown=false;
+
+   // 座標指定
+   this.x=0;
+   this.y=0;
+   this.label.x=5;
+   this.label.y=5;
+  },
+  /**
+   * メッセージを変える。ついでに大きさと場所も変える
+   * @param {String} text 表示する文字列．\nは改行に変換される．
+   */
+  set_message: function(text){
+   this.label.text=text.replace(/\n/g,"<br>");
+   var scene=game.currentScene;
+   var width=this.label._boundWidth;
+   var height=this.label._boundHeight;
+   this.x=(scene.width-width)/2;
+   this.y=(scene.height-height)/2;
+   this.bg.width=width+10
+   this.bg.height=height+10
+   this.write_border();
+  },
+  /**
+   * 表示/非表示を切り替える
+   */
+  toggle_show: function(){
+   if(this.parentNode){
+    this.parentNode.removeChild(this);
+   }else{
+    var scene=game.currentScene;
+    scene.addChild(this);
+   }
+  },
+  write_border: function(){
+   var bg_img=new Surface(this.bg.width,this.bg.height);
+   bg_img.context.fillStyle="#ffffff";
+   bg_img.context.fillRect(0,0,bg_img.width,bg_img.height);
+   bg_img.context.strokeStyle="#000000";
+   bg_img.context.lineWidth=2;
+   bg_img.context.strokeRect(2,2,bg_img.width-4,bg_img.height-4);
+   this.bg.image=bg_img;
+  }
+});
