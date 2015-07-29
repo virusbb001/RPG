@@ -49,6 +49,9 @@ $(function(){
  game.fps=60;
  game.preload('font0.png','images/chara0.png','images/map1.png');
  game.keybind(27,"pause");
+ game.keybind(90,"Z"); // Z
+ game.keybind(88,"X"); // X
+ game.keybind(67,"C"); // C
 
  // onload
  // プリロード
