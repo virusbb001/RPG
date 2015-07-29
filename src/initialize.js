@@ -215,6 +215,7 @@ var Human=enchant.Class.create(Character,{
   /**
    * @name Human
    * @class images/chara*.pngの仕様に合わせたCharacterクラス
+   * @extends Character
    */
   initialize: function(x,y){
    Character.call(this,x,y,8,16,32,32);
