@@ -1,4 +1,5 @@
-var game,player,backgroundMap,mob,commands,mob2,spike;
+var game,player,backgroundMap,mob,commands,mob2,spike,stair;
+// 最初のマップ
 var map_start;
 var sumFPS=0;
 var pause_scene,pause_text;
@@ -74,7 +75,7 @@ $(function(){
     [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
     [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
     [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-    [-1,-1,-1,-1,-1,13,-1,-1,-1,-1],
+    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
     [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
     [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
     [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
@@ -138,12 +139,14 @@ $(function(){
 
   // スパイク
   spike=new Spike(2,2);
+  stair=new Stair(4,5);
 
   // マップシーン
   map_start=new MapScene(player,backgroundMap);
   map_start.addCharacters(mob);
   // map_start.addCharacters(mob2);
   map_start.addCharacters(spike);
+  map_start.addCharacters(stair);
 
   game.rootScene.backgroundColor="#000000";
   game.pushScene(map_start);
