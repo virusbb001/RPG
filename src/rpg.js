@@ -12,6 +12,7 @@ function toggle_pause(){
   ([
 //   "HELP",
    "GAME PAUSED",
+   /*
    "LOL U DIED",
    "DISCONNECTED",
    "DISCONNECTED".split("").reverse().join(""),
@@ -25,6 +26,7 @@ function toggle_pause(){
    "PING",
    "QUEUE",
    "FORGIVE ME"
+   */
   ]).filter(function(val,index,arr){
    return val.length<=(game.width/16);
   });
@@ -168,12 +170,25 @@ $(function(){
   pause_text.setText("GAME PAUSED");
   pause_scene.backgroundColor="rgba(0, 0, 0, 0.5)";
   pause_scene.addChild(pause_text);
+
+  // 最初のメッセージ表示
+  /*
+  player.pushCommand(new player.waitMessage(player,{messages:[
+     "[Zキーを押して次に進む]",
+     "デモ版\"RPG\"にようこそ",
+     "このゲームでは\n塔の頂上を目指すことです",
+     "マップのどこかにある\n階段に乗ると、\n上に行くことが出来ます",
+     "では、頑張ってください！",
+     "カーソルキー(←↓↑→)で\n上下左右に移動します"]})
+  );
+  */
  }
 
  game.addEventListener('pausebuttondown',function(){
   toggle_pause();
  });
- game.debug();
+ // game.debug();
+ game.start();
 });
 
 function getGameObj(){
@@ -268,3 +283,10 @@ function termCommands(){
  return termObj;
 }
 
+function mes_debug_array(){
+ var message=[];
+ for(var i=0;i<arguments.length;i++){
+  message.push(arguments[i]);
+ }
+ return message;
+}
