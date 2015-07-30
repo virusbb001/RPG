@@ -433,20 +433,31 @@ var Stair=enchant.Class.create(MapChip,{
    * @extends MapChip
    */
   initialize: function(x,y){
-   MapChip.call(x,y);
-   this.pushCommand(this.jumpOnChar,{});
+   MapChip.call(this,x,y);
+   var img=new Surface(16,16);
+   img.draw(game.assets['images/map1.png'],13*16,0*16,16,16, 0,0,16,16);
+   this.image=img;
+   this.frame=0;
+   this.addEventListener("enterframe",function(){
+    this.jumpOnChar();
+   });
   },
-  jumpOnChar: enchant.Class.create(Command,{
-    cmdName: "!stair.jumpOnChar",
-    initialize:function(owner,properties){
-     Command.call(this,owner,properties);
-    },
-    action: function(){
-    },
-    popFlag: function(){
-     return false;
+  isCollision: function(target){
+   return false;
+  },
+  hitTest: function(target){
+   return target.mapY==this.mapY && target.mapX == this.mapX
+  },
+  jumpOnChar: function(){
+   var res=this.parentNode.checkHit(this);
+   if (res.length>0){
+    var dummy=new Character(0,0,0,0,40,40);
+    var check_move=this.parentNode.checkHit(dummy);
+    if(check_move.length==0){
+     res[0].move_map(0,0);
     }
-  })
+   }
+  }
 });
 
 
