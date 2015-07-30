@@ -206,6 +206,15 @@ var Character=enchant.Class.create(enchant.Sprite,{
     return (this.y+this.offsetY)/16;
    },
   },
+  /**
+   * マップ座標X,Yに移動する
+   * @param {Integer} map_x マップX座標
+   * @param {Integer} map_y マップY座標
+   */
+  move_map: function(map_x,map_y){
+   this.x=map_x*16-this.offsetX;
+   this.y=map_y*16-this.offsetY;
+  }
 });
 
 /**
