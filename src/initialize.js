@@ -325,8 +325,10 @@ var Player=enchant.Class.create(Human,{
    * @returns {Object} 引き継ぎ用オブジェクト
    */
   takeOver: function(){
-   return {}
-  }
+   return {
+    hp: this.hp
+   }
+  },
 });
 
 /**
