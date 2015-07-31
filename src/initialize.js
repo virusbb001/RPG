@@ -89,12 +89,11 @@ var Character=enchant.Class.create(enchant.Sprite,{
    this.walk=1;
    this.vx=0;
    this.vy=0;
-   this.queue=[];
    /**
     * 行動キュー
     * @type Array
     */
-   this.addEventListener('enterframe',this.doAction);
+   this.queue=[];
    this.pushCommand('think',{});
   },
   /**
@@ -471,6 +470,10 @@ var CharactersList=enchant.Class.create(enchant.Group,{
    * @class 色々関数を追加しただけのクラス
    * @extends enchant.Group
    */
+  initialize:function(){
+   enchant.Group.call(this);
+   this.addEventListener("enterframe",this.execEachCommand);
+  },
 
   /**
    * childNodesそれぞれと {@link Character#hitTest} を用いて衝突判定を行う。実行方法はchecker.hitTest(childNodes[i],hitTestOptions)
@@ -515,6 +518,22 @@ var CharactersList=enchant.Class.create(enchant.Group,{
      ret=a_sort-b_sort;
     }
     return ret;
+   });
+  },
+  /**
+   * コマンドを実行する関数
+   */
+  execEachCommand: function(){
+   this.childNodes.forEach(function(val,index,nodes){
+    var e=new enchant.Event("precommand");
+    val.dispatchEvent(e);
+
+    val.doAction();
+
+    // postcommand
+    e=new enchant.Event("postcommand");
+    val.dispatchEvent(e);
+
    });
   }
 });
