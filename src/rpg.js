@@ -119,7 +119,7 @@ $(function(){
   player.image=image;
   // characterList.addChild(player);
 
-  mob = new MoveBot(0,0);
+  mob = new MoveBot(2,1);
   mob2= new MoveBot(0,1);
   mobImage=new Surface(96,128);
   for(i=0;i<12;i++){
@@ -149,6 +149,17 @@ $(function(){
   // map_start.addCharacters(mob2);
   map_start.addCharacters(spike);
   map_start.addCharacters(stair);
+  /*
+  map_start.addEventListener("enterframe",function(){
+   console.log("map_start enter_frame");
+  });
+  player.addEventListener("enterframe",function(){
+   console.log("player enter_frame");
+  });
+  stair.addEventListener("enterframe",function(){
+   console.log("stair enter_frame");
+  });
+  */
 
   game.rootScene.backgroundColor="#000000";
   game.pushScene(map_start);

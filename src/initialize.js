@@ -342,7 +342,7 @@ var MapChip=enchant.Class.create(Character,{
    */
   initialize:function(x,y){
    Character.call(this,x,y,0,0,16,16);
-  }
+  },
 });
 
 /**
@@ -440,7 +440,7 @@ var Stair=enchant.Class.create(MapChip,{
    img.draw(game.assets['images/map1.png'],13*16,0*16,16,16, 0,0,16,16);
    this.image=img;
    this.frame=0;
-   this.addEventListener("enterframe",function(){
+   this.addEventListener("precommand",function(){
     this.jumpOnChar();
    });
   },
@@ -453,6 +453,7 @@ var Stair=enchant.Class.create(MapChip,{
   jumpOnChar: function(){
    var res=this.parentNode.checkHit(this);
    if (res.length>0){
+    console.log(res);
     var dummy=new Character(0,0,0,0,40,40);
     var check_move=this.parentNode.checkHit(dummy);
     if(check_move.length==0){
@@ -620,7 +621,7 @@ var MapScene=enchant.Class.create(enchant.Scene,{
    this.characterList.sortY();
    // HP表示
    this.hpLabel.setText("HP:"+this.player.hp);
-  }
+  },
 });
 
 /**
