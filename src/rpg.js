@@ -10,9 +10,9 @@ var paused=false;
 function toggle_pause(){
  var message_list=
   ([
-//   "HELP",
    "GAME PAUSED",
    /*
+   "HELP",
    "LOL U DIED",
    "DISCONNECTED",
    "DISCONNECTED".split("").reverse().join(""),
@@ -206,6 +206,7 @@ function getGameObj(){
  return game;
 }
 
+// コマンドオブジェクト生成
 function termCommands(){
  var data={
   player: player,
