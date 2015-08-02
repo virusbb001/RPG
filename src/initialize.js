@@ -247,7 +247,7 @@ var Player=enchant.Class.create(Human,{
     * 体力
     * @type Number
     */
-   this.hp=20;
+   this.hp=100000;
   },
   thinkingRoutine:function(){
    this.pushCommand(new this.walkInput(this,{}));
@@ -330,6 +330,9 @@ var Player=enchant.Class.create(Human,{
     hp: this.hp
    }
   },
+  damage: function(damage_val){
+   this.hp-=damage_val;
+  }
 });
 
 /**
