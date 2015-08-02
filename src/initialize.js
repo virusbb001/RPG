@@ -401,6 +401,9 @@ var Spike=enchant.Class.create(MapChip,{
    this.image=img;
    this.state=false;
    this.frame=1;
+   this.addEventListener("precommand",function(){
+    this.damage_character();
+   });
   },
   /**
    * SpikeのstateをOn/Offするクラス
@@ -420,12 +423,30 @@ var Spike=enchant.Class.create(MapChip,{
      return this.executed;
     }
   }),
+  /**
+   * precommand用 衝突している相手にダメージを与える
+   */
+  damage_character: function(){
+   if(!this.state){
+    return;
+   }
+   var res=this.parentNode.checkHit(this);
+   res.forEach(function(val){
+    if(val.damage){
+     val.damage(0.125);
+    }
+   });
+  },
   isCollision: function(){
    return this.state;
   },
   thinkingRoutine: function(){
+   // think+toggle_on_offで2フレーム消費
+   var wait_count=(16/this.parentNode.parentNode.player.baseVelocity) || 4;
    this.pushCommand(new this.toggle_on_off(this,{}));
-   this.pushCommand('wait',{count: 4+4*(this.state?0:10)});
+   // 入力待機のため+1
+   this.pushCommand('wait',{count: wait_count*(this.state?2:10)-2+1});
+   // this.pushCommand('wait',{count: 30-2});
   }
 });
 
