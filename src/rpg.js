@@ -140,7 +140,7 @@ $(function(){
   mob2.image=mobImage;
 
   // スパイク
-  spike=new Spike(2,2);
+  spike=new Spike(1,2);
   stair=new Stair(4,5);
 
   // マップシーン
