@@ -127,6 +127,35 @@ addCommand('think',{
   }
 });
 
+addCommand('watch',{
+  action: function(){
+   // var res=this.owner.parentNode.checkHit(this.owner);
+   var dir=this.owner.direction;
+   var x=0;
+   var y=0;
+   switch(dir){
+   case 0:
+    y=1;
+    break;
+   case 1:
+    x=-1;
+    break;
+   case 2:
+    x=1;
+    break;
+   case 3:
+    y=-1;
+    break;
+   }
+   var dummy=new Character(0,0,0,0,16,16);
+   dummy.move_map(this.owner.mapX+x,this.owner.mapY+y);
+   var res=this.owner.parentNode.checkHit(dummy);
+  },
+  popFlag:function(){
+   return true;
+  }
+});
+
 // 危ない
 addCommand('func',{
   initialize:function(owner,properties){
