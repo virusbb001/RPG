@@ -109,7 +109,7 @@ addCommand('wait',{
    this.count--;
   },
   popFlag:function(){
-   return this.count==0;
+   return !(this.count>0);
   }
 });
 
