@@ -713,3 +713,25 @@ var MessageWindow=enchant.Class.create(enchant.Group,{
    this.bg.image=bg_img;
   }
 });
+
+/**
+ * @scope MapManager.prototype
+ */
+var MapManager=enchant.Class.create({
+  /**
+   * @name MapManager
+   * @class MapScene管理クラス
+   */
+  initialize: function(){
+   this.map_list={};
+   this.core=null;
+  },
+  /**
+   * マップ追加関数
+   * @param {String} マップ名
+   * @param {MapScene} マップデータ
+   */
+  add_map: function(map_name,mapscene){
+   this.map_list[map_name]=mapscene;
+  }
+});
