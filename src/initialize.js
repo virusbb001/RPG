@@ -139,7 +139,7 @@ var Character=enchant.Class.create(enchant.Sprite,{
    targetY+=target.offsetY;
 
    // <=にしないのは隣通しでも重なっていると判定されるようになってしまうため
-   return (player.isCollision(targetX)&&target.isCollision(player))&&(x < targetX+16 && targetX < x +16 && y < targetY+16 && targetY < y+16);
+   return (this.isCollision(targetX)&&target.isCollision(player))&&(x < targetX+16 && targetX < x +16 && y < targetY+16 && targetY < y+16);
   },
   /**
    * mapX,mapYのみの比較のみで当たり判定を行う関数
