@@ -175,6 +175,7 @@ var Character=enchant.Class.create(enchant.Sprite,{
    * enterframe時にqueueの先頭を見て実行、
    * 実行終了後コマンドのpopflagがtrueであれば先頭から取り除く。
    * もしqueueが空ならthinkingRoutineを実行する
+   * この時popFlagを見ずに実行するため、actionの時点で問題ないかを確認する必要が有る
    */
   doAction: function(){
    // キューに1つも積まれていなければthinkを積む
