@@ -364,8 +364,8 @@ var MoveBot=enchant.Class.create(Human,{
    this.direction=2;
    this.preX=undefined;
    this.preY=undefined;
-   //this.moveArr=[3,1,0,2].reverse();
-   this.moveArr=[1,2]
+   this.moveArr=[3,1,0,2].reverse();
+   // this.moveArr=[1,2]
    this.moveIndex=this.moveArr.indexOf(this.direction);
    if(this.moveIndex<0){
     this.moveIndex=0;
