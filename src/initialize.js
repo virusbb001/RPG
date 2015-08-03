@@ -1,4 +1,5 @@
 enchant('ui');
+var commands;
 
 /**
  * @scope Command.prototype
@@ -478,7 +479,6 @@ var Stair=enchant.Class.create(MapChip,{
   jumpOnChar: function(){
    var res=this.parentNode.checkHit(this);
    if (res.length>0){
-    console.log(res);
     var dummy=new Character(0,0,0,0,40,40);
     var check_move=this.parentNode.checkHit(dummy);
     if(check_move.length==0){
@@ -648,6 +648,12 @@ var MapScene=enchant.Class.create(enchant.Scene,{
    // HP表示
    this.hpLabel.setText("HP:"+this.player.hp);
   },
+  /**
+   * 読み込んだ画像の設定
+   * newしたあとに書き換える
+   */
+  set_assets: function(){
+  }
 });
 
 /**
