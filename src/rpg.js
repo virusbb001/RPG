@@ -178,6 +178,9 @@ function termCommands(){
      this.echo("walk "+directionStr[direction]+"を"+(times > 1 ? times +"回": "") + "追加" );
     }
    }
+  },
+  watch: function(){
+   player.pushCommand("watch",{});
   }
  };
 
