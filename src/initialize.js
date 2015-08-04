@@ -739,5 +739,15 @@ var MapManager=enchant.Class.create({
    */
   add_map: function(map_name,mapscene){
    this.map_list[map_name]=mapscene;
+  },
+  /**
+   * マップ切り替えのためのenchant.Coreを設定
+   */
+  set_core: function(core){
+   if (!core instanceof enchant.Core){
+    throw new TypeError("core is not enchant.Core");
+   }
+
+   this.core=core;
   }
 });

@@ -56,6 +56,8 @@ $(function(){
  game.keybind(88,"X"); // X
  game.keybind(67,"C"); // C
 
+ map_manager.set_core(game);
+
  // onload
  // プリロード
  game.onload=function(){
