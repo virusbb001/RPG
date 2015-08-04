@@ -1,23 +1,81 @@
 
-var map;
+var map_manager;
 
 map_manager=new MapManager();
 
 // game.onload中でやる必要が有る
 function register_maps(){
-  //  --- F1 ---
-  var backgroundMap = new Map(16, 16);
-  backgroundMap.loadData([
-    [64,64,23,23,23,23,23,23,64,64],
-    [64,64,64,64,64,64,64,64,64,64],
-    [7,64,64,23,64,23,23,64,64,7],
-    [7,64,7,64,64,64,64,23,64,7],
-    [7,64,23,64,64,64,64,64,64,7],
-    [7,64,64,64,64,64,64,7,64,7],
-    [7,64,23,64,64,64,64,23,64,7],
-    [23,64,64,23,23,64,23,64,64,23],
-    [64,64,64,64,64,64,64,64,64,64],
-    [64,64,23,23,23,23,23,23,64,64]
+
+ // 共通の画像
+
+ var player_img=new Surface(96,128);
+ var player_dummy=new Player(0,0);
+ player_img.draw(game.assets['images/chara0.png'],0,0,96,128,0,0,96,128);
+ // 線を引く
+ // 衝突判定枠
+ for(i=0;i<12;i++){
+  var x,y;
+  x=(i%3)*32;
+  y=Math.floor(i/3)*32;
+  player_img.context.beginPath();
+  player_img.context.moveTo(x+player_dummy.offsetX,y+player_dummy.offsetY);
+  player_img.context.lineTo(x+player_dummy.offsetX+16,y+player_dummy.offsetY);
+  player_img.context.lineTo(x+player_dummy.offsetX+16,y+player_dummy.offsetY+16);
+  player_img.context.lineTo(x+player_dummy.offsetX,y+player_dummy.offsetY+16);
+  player_img.context.lineTo(x+player_dummy.offsetX,y+player_dummy.offsetY);
+  player_img.context.strokeStyle="#ff0000";
+  player_img.context.stroke();
+ }
+ // 最初のマップ
+ (function(){
+   var backgroundMap = new Map(16, 16);
+   backgroundMap.image = game.assets['images/map1.png'];
+   backgroundMap.loadData([
+     [7,23,7,7,7,7],
+     [7,64,23,23,23,7],
+     [7,64,64,64,64,7],
+     [23,23,23,23,23,23]
+    ],[
+     [-1,-1,-1,-1,-1,-1],
+     [-1,-1,-1,-1,-1,-1],
+     [-1,-1,-1,-1,-1,-1],
+     [-1,-1,-1,-1,-1,-1]
+   ]);
+   backgroundMap.collisionData = [
+    [1,1,1,1,1,1],
+    [1,0,1,1,1,1],
+    [1,0,0,0,0,1],
+    [1,1,1,1,1,1]
+   ];
+   var player=new Player(1,1);
+   var stair=new Stair(4,2);
+   var debug={
+    player:player,
+    stair:stair
+   }
+   var map_scene=new MapScene(player,backgroundMap);
+   map_scene.addCharacters(stair);
+
+   player.image=player_img;
+
+   map_manager.add_map("F1",map_scene);
+
+ })();
+
+ // F2登録
+ (function(){
+   var backgroundMap = new Map(16, 16);
+   backgroundMap.loadData([
+     [64,64,23,23,23,23,23,23,64,64],
+     [64,64,64,64,64,64,64,64,64,64],
+     [7,64,64,23,64,23,23,64,64,7],
+     [7,64,7,64,64,64,64,23,64,7],
+     [7,64,23,64,64,64,64,64,64,7],
+     [7,64,64,64,64,64,64,7,64,7],
+     [7,64,23,64,64,64,64,23,64,7],
+     [23,64,64,23,23,64,23,64,64,23],
+     [64,64,64,64,64,64,64,64,64,64],
+     [64,64,23,23,23,23,23,23,64,64]
    ],[
     [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
     [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
@@ -29,18 +87,18 @@ function register_maps(){
     [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
     [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
     [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-  ]);
-  backgroundMap.collisionData = [
-   [0,0,1,1,1,1,1,1,0,0],
-   [0,0,0,0,0,0,0,0,0,0],
-   [1,0,0,1,0,1,1,0,0,1],
-   [1,0,1,0,0,0,0,1,0,1],
-   [1,0,1,0,0,0,0,0,0,1],
-   [1,0,0,0,0,0,0,1,0,1],
-   [1,0,1,0,0,0,0,1,0,1],
-   [1,0,0,1,1,0,1,0,0,1],
-   [0,0,0,0,0,0,0,0,0,0],
-   [0,0,1,1,1,1,1,1,0,0]
+   ]);
+   backgroundMap.collisionData = [
+    [0,0,1,1,1,1,1,1,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [1,0,0,1,0,1,1,0,0,1],
+    [1,0,1,0,0,0,0,1,0,1],
+    [1,0,1,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,1,0,1],
+    [1,0,1,0,0,0,0,1,0,1],
+    [1,0,0,1,1,0,1,0,0,1],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,1,1,1,1,1,1,0,0]
   ];
 
   var player=new Player(1,1);
@@ -66,24 +124,7 @@ function register_maps(){
    // core=enchant.Core
    // ここに各imageの設定を追記
    backgroundMap.image = game.assets['images/map1.png'];
-   var image=new Surface(96,128);
-   image.draw(game.assets['images/chara0.png'],0,0,96,128,0,0,96,128);
-   // 線を引く
-   // 衝突判定枠
-   for(i=0;i<12;i++){
-    var x,y;
-    x=(i%3)*32;
-    y=Math.floor(i/3)*32;
-    image.context.beginPath();
-    image.context.moveTo(x+player.offsetX,y+player.offsetY);
-    image.context.lineTo(x+player.offsetX+16,y+player.offsetY);
-    image.context.lineTo(x+player.offsetX+16,y+player.offsetY+16);
-    image.context.lineTo(x+player.offsetX,y+player.offsetY+16);
-    image.context.lineTo(x+player.offsetX,y+player.offsetY);
-    image.context.strokeStyle="#ff0000";
-    image.context.stroke();
-   }
-   player.image=image;
+   player.image=player_img;
    // characterList.addChild(player);
 
    mobImage=new Surface(96,128);
@@ -104,5 +145,7 @@ function register_maps(){
    mob.image=mobImage;
   };
 
-  map_manager.add_map("F1",map_scene);
+  map_manager.add_map("F2",map_scene);
+ })();
+
 };
