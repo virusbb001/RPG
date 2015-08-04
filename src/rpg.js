@@ -61,9 +61,8 @@ $(function(){
  // onload
  // プリロード
  game.onload=function(){
-  register_maps();
+  register_maps(game);
   game.rootScene.backgroundColor="#000000";
-  map_manager.map_list["F1"].set_assets(game);
   game.pushScene(map_manager.map_list["F1"]);
 
   // ポーズ設定

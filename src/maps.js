@@ -4,8 +4,7 @@ var map_manager;
 map_manager=new MapManager();
 
 // game.onload中でやる必要が有る
-function register_maps(){
-
+function register_maps(game){
  // 共通の画像
 
  var player_img=new Surface(96,128);
@@ -120,32 +119,26 @@ function register_maps(){
   map_scene.addCharacters(spike);
   map_scene.addCharacters(stair);
 
-  map_scene.set_assets=function(game){
-   // core=enchant.Core
-   // ここに各imageの設定を追記
    backgroundMap.image = game.assets['images/map1.png'];
    player.image=player_img;
-   // characterList.addChild(player);
 
-   mobImage=new Surface(96,128);
-   for(i=0;i<12;i++){
-    var x,y;
-    x=(i%3)*32;
-    y=Math.floor(i/3)*32;
-    mobImage.context.beginPath();
-    mobImage.context.moveTo(x+mob.offsetX,y+mob.offsetY);
-    mobImage.context.lineTo(x+mob.offsetX+16,y+mob.offsetY);
-    mobImage.context.lineTo(x+mob.offsetX+16,y+mob.offsetY+16);
-    mobImage.context.lineTo(x+mob.offsetX,y+mob.offsetY+16);
-    mobImage.context.lineTo(x+mob.offsetX,y+mob.offsetY);
-    mobImage.context.strokeStyle="#ff0000";
-    mobImage.context.stroke();
-   }
-   mobImage.draw(game.assets['images/chara0.png'],96,0,96,128,0,0,96,128);
-   mob.image=mobImage;
-  };
+  mobImage=new Surface(96,128);
+  for(i=0;i<12;i++){
+   var x,y;
+   x=(i%3)*32;
+   y=Math.floor(i/3)*32;
+   mobImage.context.beginPath();
+   mobImage.context.moveTo(x+mob.offsetX,y+mob.offsetY);
+   mobImage.context.lineTo(x+mob.offsetX+16,y+mob.offsetY);
+   mobImage.context.lineTo(x+mob.offsetX+16,y+mob.offsetY+16);
+   mobImage.context.lineTo(x+mob.offsetX,y+mob.offsetY+16);
+   mobImage.context.lineTo(x+mob.offsetX,y+mob.offsetY);
+   mobImage.context.strokeStyle="#ff0000";
+   mobImage.context.stroke();
+  }
+  mobImage.draw(game.assets['images/chara0.png'],96,0,96,128,0,0,96,128);
+  mob.image=mobImage;
 
   map_manager.add_map("F2",map_scene);
  })();
-
 };
