@@ -331,7 +331,9 @@ var Player=enchant.Class.create(Human,{
    */
   takeOver: function(){
    return {
-    hp: this.hp
+    hp: this.hp,
+    direction: this.direction,
+    frame: this.frame,
    }
   },
   damage: function(damage_val){
