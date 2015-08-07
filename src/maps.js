@@ -47,7 +47,7 @@ function register_maps(game){
     [1,1,1,1,1,1]
    ];
    var player=new Player(1,1);
-   var stair=new Stair(4,2);
+   var stair=new Stair(4,2,0,0,"F2");
    var debug={
     player:player,
     stair:stair
@@ -103,7 +103,7 @@ function register_maps(game){
   var player=new Player(1,1);
   var mob = new MoveBot(2,1);
   var spike=new Spike(1,2);
-  var stair=new Stair(4,5);
+  var stair=new Stair(4,5,1,1,"F1");
 
   var debug={
    player: player,

@@ -461,9 +461,14 @@ var Stair=enchant.Class.create(MapChip,{
   /**
    * @name Stair
    * @class 階段(ワープ)クラス
+   * @param {Integer} x マップX座標
+   * @param {Integer} y マップY座標
+   * @param {Integer} move_x 移動先X座標
+   * @param {Integer} move_y 移動先Y座標
+   * @param {String} [map_id] 移動先マップID 省略時同マップ
    * @extends MapChip
    */
-  initialize: function(x,y){
+  initialize: function(x,y,move_x,move_y,move_map_id){
    MapChip.call(this,x,y);
    var img=new Surface(16,16);
    img.draw(game.assets['images/map1.png'],13*16,0*16,16,16, 0,0,16,16);
@@ -472,6 +477,13 @@ var Stair=enchant.Class.create(MapChip,{
    this.addEventListener("precommand",function(){
     this.jumpOnChar();
    });
+   this.target_pos={
+    x: move_x,
+    y: move_y
+   };
+   if(move_map_id){
+    this.target_pos.id=move_map_id;
+   }
   },
   isCollision: function(target){
    return false;
@@ -479,13 +491,25 @@ var Stair=enchant.Class.create(MapChip,{
   hitTest: function(target){
    return target.mapY==this.mapY && target.mapX == this.mapX
   },
+  /**
+   * 真上に乗ったキャラクターを飛ばす
+   * もし同マップ内でキャラが居るなどの場合は何も起こさない
+   */
   jumpOnChar: function(){
-   var res=this.parentNode.checkHit(this);
-   if (res.length>0){
-    var dummy=new Character(0,0,0,0,40,40);
-    var check_move=this.parentNode.checkHit(dummy);
-    if(check_move.length==0){
-     res[0].move_map(0,0);
+   if(this.target_pos.id){
+    var res=this.parentNode.checkHit(this);
+    if (res.length>0 && res[0] instanceof Player){
+     map_manager.move_player(this.target_pos.id,this.target_pos.x,this.target_pos.y);
+    }
+
+   }else{
+    var res=this.parentNode.checkHit(this);
+    if (res.length>0){
+     var dummy=new Character(0,0,0,0,40,40);
+     var check_move=this.parentNode.checkHit(dummy);
+     if(check_move.length==0){
+      res[0].move_map(0,0);
+     }
     }
    }
   }
