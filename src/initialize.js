@@ -283,7 +283,7 @@ var Player=enchant.Class.create(Human,{
      return (typeof this.owner.queue[1] !=="undefined");
     }
   }),
-  /*
+  /**
    * {String|Array} properties.messagesは必須
    */
   waitMessage:enchant.Class.create(Command,{
@@ -749,5 +749,27 @@ var MapManager=enchant.Class.create({
    }
 
    this.core=core;
+  },
+
+  /**
+   * プレイヤーのデータを移動させてcurrentSceneを指定したIDのMapSceneに変える
+   */
+  move_player: function(map_id,map_x,map_y){
+   if(!this.map_list[map_id]){
+    throw new Error("map_id is undefined: " + map_id);
+   }
+   var player=this.core.currentScene.player;
+   var new_map=this.map_list[map_id];
+
+   // 引き継ぎ
+   var obj=player.takeOver();
+   for(var param in obj){
+    new_map.player[param]=obj[param];
+   }
+
+   new_map.player.move_map(map_x,map_y);
+   // シーン切り替え
+   this.core.popScene();
+   this.core.pushScene(new_map);
   }
 });
