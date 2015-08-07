@@ -239,6 +239,8 @@ var Player=enchant.Class.create(Human,{
   /**
    * @name Player
    * @class プレイヤー用オブジェクト
+   * @param {Integer} x マップX座標
+   * @param {Integer} y マップY座標
    * @extends Human
    */
   initialize: function(x,y){
@@ -285,6 +287,7 @@ var Player=enchant.Class.create(Human,{
   }),
   /**
    * {String|Array} properties.messagesは必須
+   * @type Command
    */
   waitMessage:enchant.Class.create(Command,{
     initialize: function(owner,properties){
