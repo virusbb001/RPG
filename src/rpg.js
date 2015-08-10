@@ -50,7 +50,7 @@ $(function(){
  game=new Game(16*16,16*16);
  lbl=new MutableText(0,0,game.width);
  game.fps=60;
- game.preload('font0.png','images/chara0.png','images/map1.png');
+ game.preload('font0.png','images/chara0.png','images/chara5.png','images/map1.png','images/map0.png');
  game.keybind(27,"pause");
  game.keybind(90,"Z"); // Z
  game.keybind(88,"X"); // X
