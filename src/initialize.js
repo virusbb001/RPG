@@ -402,9 +402,6 @@ var Spike=enchant.Class.create(MapChip,{
    */
   initialize: function(x,y){
    MapChip.call(this,x,y);
-   var img=new Surface(32,16);
-   img.draw(game.assets['images/map1.png'],11*16,2*16,32,16,0,0,32,16);
-   this.image=img;
    this.state=false;
    this.frame=1;
    this.addEventListener("precommand",function(){
@@ -472,9 +469,6 @@ var Stair=enchant.Class.create(MapChip,{
    */
   initialize: function(x,y,move_x,move_y,move_map_id){
    MapChip.call(this,x,y);
-   var img=new Surface(16,16);
-   img.draw(game.assets['images/map1.png'],13*16,0*16,16,16, 0,0,16,16);
-   this.image=img;
    this.frame=0;
    this.addEventListener("precommand",function(){
     this.jumpOnChar();
