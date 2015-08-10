@@ -5,26 +5,34 @@ map_manager=new MapManager();
 
 // game.onload中でやる必要が有る
 function register_maps(game){
- // 共通の画像
+ var surface_tmp;
 
- var player_img=new Surface(96,128);
- var player_dummy=new Player(0,0);
- player_img.draw(game.assets['images/chara0.png'],0,0,96,128,0,0,96,128);
- // 線を引く
- // 衝突判定枠
- for(i=0;i<12;i++){
-  var x,y;
-  x=(i%3)*32;
-  y=Math.floor(i/3)*32;
-  player_img.context.beginPath();
-  player_img.context.moveTo(x+player_dummy.offsetX,y+player_dummy.offsetY);
-  player_img.context.lineTo(x+player_dummy.offsetX+16,y+player_dummy.offsetY);
-  player_img.context.lineTo(x+player_dummy.offsetX+16,y+player_dummy.offsetY+16);
-  player_img.context.lineTo(x+player_dummy.offsetX,y+player_dummy.offsetY+16);
-  player_img.context.lineTo(x+player_dummy.offsetX,y+player_dummy.offsetY);
-  player_img.context.strokeStyle="#ff0000";
-  player_img.context.stroke();
- }
+ // 共通の画像
+ var images={}
+ // プレイヤー用
+ images.player=game.assets['images/chara5.png'];
+
+ // move_bot
+ surface=new Surface(32*3,32*4);
+ surface.draw(game.assets['images/chara0.png'],0,0,32*3,32*4,0,0,32*3,32*4);
+ images.moveBotA=surface;
+
+ // 看板用
+ surface=new Surface(16,16);
+ surface.draw(game.assets['images/map0.png'],8*16,1*16,16,16,0,0,16,16);
+ images.signboard=surface;
+
+ // 上り階段
+ surface=new Surface(16,16);
+ surface.draw(game.assets['images/map0.png'],13*16,0,16,16,0,0,16,16);
+ images.upStair=surface;
+
+ // トゲ
+ surface=new Surface(16*2,16);
+ surface.draw(game.assets['images/map0.png'],0,16,16*2,16,0,0,32,16);
+ images.spike=surface;
+
+
  // 最初のマップ
  (function(){
    var backgroundMap = new Map(16, 16);
@@ -48,14 +56,16 @@ function register_maps(game){
    ];
    var player=new Player(1,1);
    var stair=new Stair(4,2,0,0,"F2");
+   player.image=images.player;
+   stair.image=images.upStair;
+
    var debug={
     player:player,
     stair:stair
    }
+
    var map_scene=new MapScene(player,backgroundMap);
    map_scene.addCharacters(stair);
-
-   player.image=player_img;
 
    map_manager.add_map("F1",map_scene);
 
@@ -64,6 +74,7 @@ function register_maps(game){
  // F2登録
  (function(){
    var backgroundMap = new Map(16, 16);
+   backgroundMap.image = game.assets['images/map1.png'];
    backgroundMap.loadData([
      [64,64,23,23,23,23,23,23,64,64],
      [64,64,64,64,64,64,64,64,64,64],
@@ -104,6 +115,11 @@ function register_maps(game){
   var mob = new MoveBot(2,1);
   var spike=new Spike(1,2);
   var stair=new Stair(4,5,1,1,"F1");
+  player.image=images.player;
+  mob.image=images.moveBotA;
+  spike.image=images.spike;
+  stair.image=images.upStair;
+
 
   var debug={
    player: player,
@@ -118,26 +134,7 @@ function register_maps(game){
   map_scene.addCharacters(mob);
   map_scene.addCharacters(spike);
   map_scene.addCharacters(stair);
-
-   backgroundMap.image = game.assets['images/map1.png'];
-   player.image=player_img;
-
-  mobImage=new Surface(96,128);
-  for(i=0;i<12;i++){
-   var x,y;
-   x=(i%3)*32;
-   y=Math.floor(i/3)*32;
-   mobImage.context.beginPath();
-   mobImage.context.moveTo(x+mob.offsetX,y+mob.offsetY);
-   mobImage.context.lineTo(x+mob.offsetX+16,y+mob.offsetY);
-   mobImage.context.lineTo(x+mob.offsetX+16,y+mob.offsetY+16);
-   mobImage.context.lineTo(x+mob.offsetX,y+mob.offsetY+16);
-   mobImage.context.lineTo(x+mob.offsetX,y+mob.offsetY);
-   mobImage.context.strokeStyle="#ff0000";
-   mobImage.context.stroke();
-  }
-  mobImage.draw(game.assets['images/chara0.png'],96,0,96,128,0,0,96,128);
-  mob.image=mobImage;
+  map_scene.debug=debug;
 
   map_manager.add_map("F2",map_scene);
  })();
