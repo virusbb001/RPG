@@ -81,12 +81,6 @@ var Character=enchant.Class.create(enchant.Sprite,{
     * @type Integer
     */
    this.y=y*16-offsetY;
-   /**
-    * キャラクターがどの方向を向いているか
-    * 上: 3 左 1 右: 2 下: 0
-    * @type Number
-    */
-   this.direction=0;
    this.walk=1;
    this.vx=0;
    this.vy=0;
@@ -229,7 +223,41 @@ var Human=enchant.Class.create(Character,{
    */
   initialize: function(x,y){
    Character.call(this,x,y,8,16,32,32);
+   this._direction=0;
+   this._state_frame=0;
+   /**
+    * 何フレーム単位で方向を変えるか
+    */
+   this.direction_frame=3;
+   // 同じdirection内のフレーム
   },
+  /**
+   * キャラクターがどの方向を向いているか
+   * 上: 3 左 1 右: 2 下: 0
+   * @type Number
+   */
+  direction: {
+   set: function(dir){
+    this._direction=dir;
+    this.frame=this._direction*this.direction_frame+this.frame%this.direction_frame;
+   },
+   get: function(){
+    return this._direction;
+   }
+  },
+  /**
+   * 同じdirectionの画像内でのframe
+   * @type Number
+   */
+  state_frame: {
+   set: function(state_frame){
+    this._state_frame=state_frame;
+    this.frame=this.frame-(this.frame%this.direction_frame)+state_frame;
+   },
+   get: function(){
+    return this._state_frame;
+   }
+  }
 });
 
 /**
