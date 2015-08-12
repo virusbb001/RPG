@@ -58,8 +58,10 @@ addCommand('walk',{
    default:
     throw new Error("Invalid value: properties.direction");
    }
-   this.owner.frame=this.direction*3+this.walk;
+   // TODO: なんとかする
+   // this.owner.frame=this.direction*3+this.walk;
    this.owner.direction=this.direction;
+   this.owner.state_frame=this.walk;
   },
   action: function(){
    if(this.preAction&&!this.checkValid()){
@@ -78,7 +80,7 @@ addCommand('walk',{
     this.isMoving=false;
     this.walk=1;
    }
-   this.owner.frame=this.direction*3+this.walk;
+   this.owner.state_frame=this.walk;
   },
   // 移動先が壁じゃないかどうかなど
   // 無効な移動は拒否する
