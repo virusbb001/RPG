@@ -261,29 +261,65 @@ var Human=enchant.Class.create(Character,{
 });
 
 /**
- * @scope Player.prototype
+ * @scope Knight.prototype
  */
-var Player=enchant.Class.create(Human,{
+var Knight=enchant.Class.create(Human,{
   /**
-   * @name Player
-   * @class プレイヤー用オブジェクト 画像はchara5.pngを使用
+   * @name Knight
+   * @class chara5,chara7の形式の画像に使うHuman
    * @param {Integer} x マップX座標
    * @param {Integer} y マップY座標
    * @extends Human
    */
   initialize: function(x,y){
    Human.call(this,x,y);
+   this._state=0;
+   this.direction_frame=9;
+   this.state_length=3;
+  },
+  /**
+   * 今何をしているか 何もしていない: 0, 盾: 1 , 剣:2
+   */
+  state: {
+   get: function(){
+    return this._state;
+   },
+   set: function(state){
+    this._state=state;
+    var state_frame=this.frame%this.state_length;
+    this.frame=this.frame-this.frame%this.direction_frame+(state*this.state_length+state_frame);
+   },
+  },
+  state_frame: {
+   set: function(state_frame){
+    this._state_frame=state_frame;
+    this.frame=this.frame-(this.frame%this.state_length)+state_frame;
+   },
+   get: function(){
+    return this._state_frame;
+   }
+  }
+});
+
+/**
+ * @scope Player.prototype
+ */
+var Player=enchant.Class.create(Knight,{
+  /**
+   * @name Player
+   * @class プレイヤー用オブジェクト 画像はchara5.pngを使用
+   * @param {Integer} x マップX座標
+   * @param {Integer} y マップY座標
+   * @extends Knight
+   */
+  initialize: function(x,y){
+   Knight.call(this,x,y);
    this.baseVelocity=4;
    /**
     * 体力
     * @type Number
     */
    this.hp=100000;
-   /**
-    * 今何をしているか 何もしていない: 0, 盾: 1 , 剣:2
-    */
-   this.state=0;
-   this.direction_frame=9;
   },
   thinkingRoutine:function(){
    this.pushCommand(new this.walkInput(this,{}));
