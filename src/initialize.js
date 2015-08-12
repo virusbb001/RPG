@@ -266,7 +266,7 @@ var Human=enchant.Class.create(Character,{
 var Player=enchant.Class.create(Human,{
   /**
    * @name Player
-   * @class プレイヤー用オブジェクト
+   * @class プレイヤー用オブジェクト 画像はchara5.pngを使用
    * @param {Integer} x マップX座標
    * @param {Integer} y マップY座標
    * @extends Human
@@ -279,6 +279,11 @@ var Player=enchant.Class.create(Human,{
     * @type Number
     */
    this.hp=100000;
+   /**
+    * 今何をしているか 何もしていない: 0, 盾: 1 , 剣:2
+    */
+   this.state=0;
+   this.direction_frame=9;
   },
   thinkingRoutine:function(){
    this.pushCommand(new this.walkInput(this,{}));
@@ -361,12 +366,11 @@ var Player=enchant.Class.create(Human,{
    return {
     hp: this.hp,
     direction: this.direction,
-    frame: this.frame,
    }
   },
   damage: function(damage_val){
    this.hp-=damage_val;
-  }
+  },
 });
 
 /**
