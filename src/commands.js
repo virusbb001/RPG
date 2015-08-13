@@ -160,6 +160,35 @@ addCommand('watch',{
   }
 });
 
+// Knight用コマンド
+addCommand('attack',{
+  initialize: function(owner,properties){
+   Command.call(this,owner,properties);
+   if(owner instanceof Knight){
+    this.change_state=true;
+   }
+   this.state_interval=30;
+   this.count=0;
+   this.endFlag=false;
+  },
+  action: function(){
+   if(this.change_state){
+    this.owner.state=2;
+    this.change_state=false;
+   }
+   this.owner.state_frame=Math.floor(this.count/this.state_interval);
+   this.count++;
+   if(this.count==this.state_interval*3){
+    this.owner.state=0;
+    this.owner.state_frame=1;
+    this.endFlag=true;
+   }
+  },
+  popFlag: function(){
+   return this.endFlag;
+  }
+});
+
 // 危ない
 addCommand('func',{
   initialize:function(owner,properties){
