@@ -64,6 +64,7 @@ $(function(){
   register_maps(game);
   game.rootScene.backgroundColor="#000000";
   game.pushScene(map_manager.map_list["F1"]);
+  player=game.currentScene.player;
 
   // ポーズ設定
   pause_scene=new Scene();
