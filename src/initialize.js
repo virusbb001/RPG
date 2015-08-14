@@ -816,6 +816,7 @@ var MapManager=enchant.Class.create({
   initialize: function(){
    this.map_list={};
    this.core=null;
+   this.now_map=null;
   },
   /**
    * マップ追加関数
@@ -856,6 +857,7 @@ var MapManager=enchant.Class.create({
    }
 
    new_map.player.move_map(map_x,map_y);
+   this.now_map=map_id;
    this.core.pushScene(new_map);
   }
 });
