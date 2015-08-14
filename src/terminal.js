@@ -31,7 +31,6 @@ function enableRBM(){
  term.push(
   function(command,term){
    var cmd=$.terminal.splitCommand(command);
-   console.log(cmd);
    if(availableCmd[cmd.name]){
     availableCmd[cmd.name].apply(term,cmd.args);
    }else{
