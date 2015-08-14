@@ -1,7 +1,8 @@
 var term;
-var getTermObj=window.parent.getTermObj;
+var rpg;
 $(function(){
  term=$("#terminal").terminal(function(command,term){
+  // デバッグ用
   if(command.length>0){
    term.echo("あなたは'"+command+"'とタイプした");
   }
@@ -16,19 +17,27 @@ $(function(){
   prompt: '> ',
   enabled: true,
   checkArity: false
-  /*
-  onExit: function(terminal){
-   alert(terminal);
-  }
-  */
  });
  term.disable();
 });
 
 function enableRBM(){
+ if(!rpg){
+  rpg=window.parent.rpg;
+ }
+ var availableCmd=rpg.getTermCommands();
  term.clear();
+ term.echo("Rogue Bot Manager\n<fn> + <Up>と<fn> + <Down> でスクロール");
  term.push(
-  getTermObj(),{
+  function(command,term){
+   var cmd=$.terminal.splitCommand(command);
+   console.log(cmd);
+   if(availableCmd[cmd.name]){
+    availableCmd[cmd.name].apply(term,cmd.args);
+   }else{
+    term.echo("[[b;red;]コマンドが見つからない]");
+   }
+  },{
   name: "RBM",
   prompt: "RBM> ",
   onExit: function(terminal){
