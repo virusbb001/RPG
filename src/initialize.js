@@ -440,12 +440,12 @@ var MoveBot=enchant.Class.create(Human,{
    this.direction=2;
    this.preX=undefined;
    this.preY=undefined;
-   this.moveArr=[3,1,0,2].reverse();
-   // this.moveArr=[1,2]
+   this.moveArr=[3,1,0,2]
    this.moveIndex=this.moveArr.indexOf(this.direction);
    if(this.moveIndex<0){
     this.moveIndex=0;
    }
+   this.pushCommand('wait',{count: 30});
   },
   thinkingRoutine: function(){
    if(this.preX==this.x && this.preY==this.y){
@@ -698,8 +698,8 @@ var MapScene=enchant.Class.create(enchant.Scene,{
    this.fgMap=fgMap || null;
    this.player=player;
    //  FPS表示用
-   this.lbl=new MutableText(0,0,game.width);
-   this.hpLabel=new MutableText(0,16,game.width);
+   this.lbl=new MutableText(0,16,game.width);
+   this.hpLabel=new MutableText(0,0,game.width);
    this.sumFPS=0;
    this.addChild(this.bgMap);
    this.addChild(this.characterList);
@@ -752,7 +752,7 @@ var MapScene=enchant.Class.create(enchant.Scene,{
    // FPS計算
    this.sumFPS+=game.actualFps;
    if(game.frame%10==0){
-    this.lbl.setText(""+Math.round(this.sumFPS/10));
+    this.lbl.setText("FPS:"+Math.round(this.sumFPS/10));
     this.sumFPS=0;
    }
    // ソート
