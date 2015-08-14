@@ -61,9 +61,9 @@ $(function(){
  // onload
  // プリロード
  game.onload=function(){
-  register_maps(game);
   game.rootScene.backgroundColor="#000000";
-  game.pushScene(map_manager.map_list["F1"]);
+  register_maps(game);
+  map_manager.move_player(["F1"],1,1);
   player=game.currentScene.player;
 
   // ポーズ設定
