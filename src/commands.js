@@ -44,12 +44,16 @@ addCommand('walk',{
    }
    // TODO: なんとかする
    // this.owner.frame=this.direction*3+this.walk;
-   this.owner.direction=this.direction;
-   this.owner.state_frame=this.walk;
   },
   action: function(){
-   if(this.preAction&&!this.checkValid()){
-    this.isMoving=false;
+   // 行動前
+   if(this.preAction){
+    if(this.checkValid()){
+     this.owner.direction=this.direction;
+     this.owner.state_frame=this.walk;
+    }else{
+     this.isMoving=false;
+    }
    }
    this.preAction=false;
    if(!this.isMoving){
