@@ -10,22 +10,6 @@ function addCommand(name,definition){
  return commands[name];
 }
 
-/*
-addCommand('test',{
-  initialize: function(owner,properties){
-   Command.call(this,owner,properties);
-   this.doFlag=false;
-  },
-  action: function(){
-   console.log(this);
-   this.doFlag=true;
-  },
-  popFlag: function(){
-   return this.doFlag;
-  }
-});
-*/
-
 addCommand('walk',{
   /*
    * 0: Down 1: Left 2: Right 3: Up
