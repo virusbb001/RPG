@@ -56,33 +56,6 @@ function termCommands(){
     }
    };
   })(),
-  walk: function(){
-   var directionStr=["down","left","right","up"];
-   if(arguments.length<1 || arguments[0] == "help"){
-    this.echo("walk *direction* [times]")
-    this.echo("歩くコマンドを追加する");
-    this.echo("引数");
-    this.echo("direction down: 下 left: 左 right: 右 up: 上");
-    this.echo("times: 回数\n\tデフォルト: 1\n\t0は1として扱われる");
-   }else{
-    var direction=arguments[0]-0;
-    var times=arguments[1] || 1;
-    if(isNaN(direction)){
-     direction=directionStr.indexOf(arguments[0].toLowerCase());
-    }
-
-    if(direction < 0 || 3< direction){
-     this.echo("方向の指定がおかしい");
-    }else if(times<0){
-     this.echo("回数に負の値は指定できない");
-    }else{
-     for(var i=0;i<times;i++){
-      player.pushCommand('walk',{direction: direction});
-     }
-     this.echo("walk "+directionStr[direction]+"を"+(times > 1 ? times +"回": "") + "追加" );
-    }
-   }
-  },
   watch: function(){
    player.pushCommand("watch",{});
   }
