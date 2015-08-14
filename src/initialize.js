@@ -739,12 +739,6 @@ var MapScene=enchant.Class.create(enchant.Scene,{
    // HP表示
    this.hpLabel.setText("HP:"+this.player.hp);
   },
-  /**
-   * 読み込んだ画像の設定
-   * newしたあとに書き換える
-   */
-  set_assets: function(){
-  }
 });
 
 /**
