@@ -222,13 +222,16 @@ var Human=enchant.Class.create(Character,{
    */
   initialize: function(x,y){
    Character.call(this,x,y,8,16,32,32);
+   // 内部変数
    this._direction=0;
-   this._state_frame=0;
+   this._state_frame=1;
+   this.frame=1;
+
    /**
     * 何フレーム単位で方向を変えるか
     */
    this.direction_frame=3;
-   // 同じdirection内のフレーム
+
   },
   /**
    * キャラクターがどの方向を向いているか
@@ -419,7 +422,7 @@ var MapChip=enchant.Class.create(Character,{
    */
   initialize:function(x,y){
    Character.call(this,x,y,0,0,16,16);
-  },
+  }
 });
 
 /**
