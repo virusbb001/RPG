@@ -90,6 +90,7 @@ var Character=enchant.Class.create(enchant.Sprite,{
     */
    this.queue=[];
    this.pushCommand('think',{});
+   this.frame=0;
   },
   /**
    * 基本速度指定
@@ -134,7 +135,7 @@ var Character=enchant.Class.create(enchant.Sprite,{
    targetY+=target.offsetY;
 
    // <=にしないのは隣通しでも重なっていると判定されるようになってしまうため
-   return (this.isCollision(targetX)&&target.isCollision(player))&&(x < targetX+16 && targetX < x +16 && y < targetY+16 && targetY < y+16);
+   return (this.isCollision(targetX)&&target.isCollision(this))&&(x < targetX+16 && targetX < x +16 && y < targetY+16 && targetY < y+16);
   },
   /**
    * mapX,mapYのみの比較のみで当たり判定を行う関数
