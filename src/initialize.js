@@ -164,8 +164,6 @@ var Character=enchant.Class.create(enchant.Sprite,{
     return;
    }
    this.queue.push(act);
-   if(act.popFlag()){
-   }
   },
   /**
    * enterframe時にqueueの先頭を見て実行、
