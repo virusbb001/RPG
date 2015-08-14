@@ -816,6 +816,10 @@ var MapManager=enchant.Class.create({
   initialize: function(){
    this.map_list={};
    this.core=null;
+   /**
+    * 現在のマップID
+    * @type String
+    */
    this.now_map=null;
   },
   /**
