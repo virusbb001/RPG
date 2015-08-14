@@ -93,11 +93,8 @@ function termCommands(){
 
 function getTermCommands(){
  // 呼び出される時はtermObj[command].apply(term,args)
- // map_scene;
- var chara=game.currentScene.availableChara;
- console.log(game);
- console.log(game.currentScene);
- console.log(game.currentScene.availableChara);
+ var now_map_id=map_manager.now_map
+ var chara=map_manager.map_list[now_map_id].availableChara;
  var termObj={
   help: function(){
    for(var i in termObj){
