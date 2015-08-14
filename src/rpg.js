@@ -1,8 +1,7 @@
-var game,player,backgroundMap,mob,commands,mob2,spike,stair;
-var map_manager;
+var game,map_manager;
+
+var player,backgroundMap,mob,commands,mob2,spike,stair;
 // 最初のマップ
-var map_start;
-var sumFPS=0;
 var pause_scene,pause_text;
 // キャラクター用配列
 // var characterList=new CharactersList();
