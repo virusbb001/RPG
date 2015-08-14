@@ -578,6 +578,25 @@ var Stair=enchant.Class.create(MapChip,{
   }
 });
 
+/**
+ * @scope InvisiblePlayerGate
+ */
+var InvisiblePlayerGate=enchant.Class.create(MapChip,{
+  /**
+   * @name InvisiblePlayerGate
+   * @class プレイヤーのみを通すためのもの
+   * @param {Integer} x マップX座標
+   * @param {Integer} y マップY座標
+   * @extends MapChip
+   */
+  initialize: function(x,y){
+   MapChip.call(this,x,y);
+  },
+  isCollision: function(target){
+   return !(target instanceof Player);
+  }
+});
+
 
 /**
  * @scope CharactersList.prototype

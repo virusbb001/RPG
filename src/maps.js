@@ -32,6 +32,11 @@ function register_maps(game){
  surface.draw(game.assets['images/map0.png'],0,16,16*2,16,0,0,32,16);
  images.spike=surface;
 
+ // ダミー用
+ surface=new Surface(16,16);
+ surface.context.clearRect(0,0,16,16);
+ images.dummy=surface;
+
 
  // 最初のマップ
  (function(){
@@ -115,10 +120,13 @@ function register_maps(game){
   var mob = new MoveBot(2,1);
   var spike=new Spike(1,2);
   var stair=new Stair(4,5,1,1,"F1");
+  var dummy=new InvisiblePlayerGate(0,0);
   player.image=images.player;
   mob.image=images.moveBotA;
   spike.image=images.spike;
   stair.image=images.upStair;
+  dummy.image=images.dummy;
+  console.log(dummy);
 
   var map_scene=new MapScene(player,backgroundMap);
 
@@ -126,12 +134,14 @@ function register_maps(game){
   map_scene.addCharacters(mob);
   map_scene.addCharacters(spike);
   map_scene.addCharacters(stair);
+  map_scene.addCharacters(dummy);
 
   map_scene.availableChara={
    player: player,
    mob: mob,
    spike: spike,
-   stair: stair
+   stair: stair,
+   dummy: dummy,
   }
 
   map_manager.add_map("F2",map_scene);
