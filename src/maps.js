@@ -59,13 +59,13 @@ function register_maps(game){
    player.image=images.player;
    stair.image=images.upStair;
 
-   var debug={
-    player:player,
-    stair:stair
-   }
 
    var map_scene=new MapScene(player,backgroundMap);
    map_scene.addCharacters(stair);
+   map_scene.availableChara={
+    player:player,
+    stair:stair
+   };
 
    map_manager.add_map("F1",map_scene);
 
@@ -120,21 +120,19 @@ function register_maps(game){
   spike.image=images.spike;
   stair.image=images.upStair;
 
-
-  var debug={
-   player: player,
-   mob: mob,
-   spike: spike,
-   stair: stair
-  }
-
   var map_scene=new MapScene(player,backgroundMap);
 
   // プレイヤー以外のオブジェクト追加
   map_scene.addCharacters(mob);
   map_scene.addCharacters(spike);
   map_scene.addCharacters(stair);
-  map_scene.debug=debug;
+
+  map_scene.availableChara={
+   player: player,
+   mob: mob,
+   spike: spike,
+   stair: stair
+  }
 
   map_manager.add_map("F2",map_scene);
  })();
