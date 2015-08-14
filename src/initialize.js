@@ -843,18 +843,19 @@ var MapManager=enchant.Class.create({
    if(!this.map_list[map_id]){
     throw new Error("map_id is undefined: " + map_id);
    }
-   var player=this.core.currentScene.player;
    var new_map=this.map_list[map_id];
+   if(this.core.currentScene instanceof MapScene){
+    var player=this.core.currentScene.player;
 
-   // 引き継ぎ
-   var obj=player.takeOver();
-   for(var param in obj){
-    new_map.player[param]=obj[param];
+    // 引き継ぎ
+    var obj=player.takeOver();
+    for(var param in obj){
+     new_map.player[param]=obj[param];
+    }
+    this.core.popScene();
    }
 
    new_map.player.move_map(map_x,map_y);
-   // シーン切り替え
-   this.core.popScene();
    this.core.pushScene(new_map);
   }
 });
