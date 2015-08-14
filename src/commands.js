@@ -10,6 +10,9 @@ function addCommand(name,definition){
  return commands[name];
 }
 
+// 指定の方向に歩くコマンド
+// direction: 数値
+// 0: Down 1: Left 2: Right 3: Up
 addCommand('walk',{
   /*
    * 0: Down 1: Left 2: Right 3: Up
@@ -89,10 +92,9 @@ addCommand('walk',{
   }
 });
 
+// その場で待機するコマンド
+// count: 待つフレーム数
 addCommand('wait',{
-  /*
-   * その場で待機
-   */
   initialize:function(owner,properties){
    Command.call(this,owner,properties);
    this.count=this.properties.count || 0;
@@ -105,6 +107,7 @@ addCommand('wait',{
   }
 });
 
+// thinkingRoutineを呼び出すコマンド
 addCommand('think',{
   initialize:function(owner,properties){
    Command.call(this,owner,properties);
@@ -149,6 +152,7 @@ addCommand('watch',{
 });
 
 // Knight用コマンド
+// 今のところ剣を振るモーションを行うのみ
 addCommand('attack',{
   initialize: function(owner,properties){
    Command.call(this,owner,properties);
