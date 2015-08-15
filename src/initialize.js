@@ -540,7 +540,7 @@ var Stair=enchant.Class.create(MapChip,{
   initialize: function(x,y,move_x,move_y,move_map_id){
    MapChip.call(this,x,y);
    this.frame=0;
-   this.addEventListener("precommand",function(){
+   this.addEventListener("postcommand",function(){
     this.jumpOnChar();
    });
    this.target_pos={
