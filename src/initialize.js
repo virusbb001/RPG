@@ -369,7 +369,7 @@ var Player=enchant.Class.create(Knight,{
      if(!(messages instanceof Array)){
       messages=[messages.toString()];
      }
-     this.messages=messages;
+     this.messages=messages.concat();
      this.mes_win=new MessageWindow();
      this.mes_win.set_message(this.messages[0]);
      this.flag=true;
