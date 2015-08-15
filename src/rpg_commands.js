@@ -101,6 +101,18 @@ function getTermCommands(){
      this.echo("walk "+directionStr[direction]+"を"+(times > 1 ? times +"回": "") + "追加" );
     }
    }
+  },
+  attack: function(times){
+   var player=chara.player;
+   if(times === "help"){
+    this.echo("今向いている方向に攻撃する");
+    return;
+   }
+   var times=(typeof(times)==="undefined")?1:times;
+   for(var i=0;i<times;i++){
+    player.pushCommand('attack');
+   }
+   this.echo("attackを" + (times > 1 ? times + "回" : "") + "追加");
   }
  };
 
