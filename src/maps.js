@@ -43,8 +43,8 @@ function register_maps(game){
    var backgroundMap = new Map(16, 16);
    backgroundMap.image = game.assets['images/map1.png'];
    backgroundMap.loadData([
-     [7,23,7,7,7,7],
-     [7,64,23,23,23,7],
+     [7,23,23,7,7,7],
+     [7,64,64,23,23,7],
      [7,64,64,64,64,7],
      [23,23,23,23,23,23]
     ],[
@@ -55,21 +55,30 @@ function register_maps(game){
    ]);
    backgroundMap.collisionData = [
     [1,1,1,1,1,1],
-    [1,0,1,1,1,1],
+    [1,0,0,1,1,1],
     [1,0,0,0,0,1],
     [1,1,1,1,1,1]
    ];
    var player=new Player(1,1);
    var stair=new Stair(4,2,0,0,"F2");
+   var signboard=new Signboard(2,1,[
+     "[Zキーを押して次に進む]",
+     "デモ版\"RPG\"にようこそ",
+     "このゲームでは\n塔の頂上を目指すことです",
+     "マップのどこかにある\n階段に乗ると、\n上に行くことが出来ます",
+     "では、頑張ってください！",
+     "カーソルキー(←↓↑→)で\n上下左右に移動します"]);
    player.image=images.player;
    stair.image=images.upStair;
-
+   signboard.image=images.signboard;
 
    var map_scene=new MapScene(player,backgroundMap);
    map_scene.addCharacters(stair);
+   map_scene.addCharacters(signboard);
    map_scene.availableChara={
     player:player,
-    stair:stair
+    stair:stair,
+    signboard: signboard
    };
 
    map_manager.add_map("F1",map_scene);
