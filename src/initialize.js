@@ -611,6 +611,32 @@ var InvisiblePlayerGate=enchant.Class.create(MapChip,{
   }
 });
 
+/**
+ * @scope Signboard
+ */
+var Signboard = enchant.Class.create(MapChip,{
+  /**
+   * @name Signboard
+   * @class 看板 チェックするとゲーム内にメッセージを表示する
+   * @param {Integer} x マップX座標
+   * @param {Integer} y マップY座標
+   * @param {Array} messages 表示するメッセージの配列
+   * @extends MapChip
+   */
+  initialize: function(x,y,messages){
+   MapChip.call(this,x,y);
+   this.messages=messages;
+   this.addEventListener("check",this.checked);
+  },
+  checked: function(e){
+   var checker=e.checker;
+   if(checker instanceof Player){
+    var cmd=new checker.waitMessage(checker,{messages: this.messages});
+    checker.pushCommand(cmd);
+   }
+  }
+});
+
 
 /**
  * @scope CharactersList.prototype
