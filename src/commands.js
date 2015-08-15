@@ -210,7 +210,7 @@ addCommand('check',{
     var e=new enchant.Event("check");
     e.checker=this.owner;
     res.forEach(function(val){
-     res.dispatchEvent(e);
+     val.dispatchEvent(e);
     });
    }
   }
