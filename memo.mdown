@@ -10,3 +10,21 @@
 * popFlagがonでアレば取り出す
 
 * コマンド1つにつき必ず1フレーム消費する
+
+## 独自イベント
+
+* precommand
+	* 全てのキャラクターがコマンドを実行する前に行う
+	* MapSceneに属しているcharactersListの要素に対して発火される
+	* 順番はcharactersListの順
+* postcommand
+	* 全てのキャラクターがコマンドを実行した後に行う
+	* ほかはprecommandに同じ
+* check
+	* Characterのcheckコマンドによって発火される
+	* 発火されるのは被チェックオブジェクト
+	* 発火する方はコマンドが実行されたタイミング
+	* 発火される方は対象内でかつcharactersListの順
+	* EventObjectProperty
+		+ checker
+			+ チェックした人
