@@ -126,7 +126,6 @@ function register_maps(game){
   spike.image=images.spike;
   stair.image=images.upStair;
   dummy.image=images.dummy;
-  console.log(dummy);
 
   var map_scene=new MapScene(player,backgroundMap);
 
