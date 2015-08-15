@@ -882,6 +882,8 @@ var MapManager=enchant.Class.create({
    }
 
    new_map.player.move_map(map_x,map_y);
+   // 既に積んでいたキューは空にする
+   new_map.player.queue.length=0;
    this.now_map=map_id;
    this.core.pushScene(new_map);
   }
