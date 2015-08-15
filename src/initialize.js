@@ -334,6 +334,7 @@ var Player=enchant.Class.create(Knight,{
     cmdName: "!player.walkInput",
     action:function(){
      var direction;
+     var state;
      if(game.input.left){
       direction=1;
      }else if(game.input.right){
@@ -342,12 +343,20 @@ var Player=enchant.Class.create(Knight,{
       direction=3;
      }else if(game.input.down){
       direction=0;
+     }else if(game.input.Z){
+      state=1;
+     }else if(game.input.X){
+      state=2;
      }
      if(direction!==undefined){
       this.owner.pushCommand('walk',{direction: direction});
       // 滑らかに動かすために1度actionを実行する
       if(this.owner.queue[1]!==undefined){
        this.owner.queue[1].action();
+      }
+     }else{
+      if(state==1){
+       this.owner.pushCommand("attack");
       }
      }
     },
