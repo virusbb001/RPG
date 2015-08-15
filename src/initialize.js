@@ -151,7 +151,7 @@ var Character=enchant.Class.create(enchant.Sprite,{
   /**
    * コマンドをpushする関数
    * @param {String|Command} command commandsに登録されているコマンドかcommandオブジェクト
-   * @param {Object} properties commandsに追加するためのプロパティ
+   * @param {Object} properties commandsに追加するためのプロパティ commandがオブジェクトの場合は不要
    */
   pushCommand: function(command,properties){
    var act;
