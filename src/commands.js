@@ -51,10 +51,9 @@ addCommand('walk',{
   action: function(){
    // 行動前
    if(this.preAction){
-    if(this.checkValid()){
-     this.owner.direction=this.direction;
-     this.owner.state_frame=this.walk;
-    }else{
+    this.owner.direction=this.direction;
+    this.owner.state_frame=this.walk;
+    if(!this.checkValid()){
      this.isMoving=false;
     }
    }
