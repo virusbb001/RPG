@@ -386,7 +386,8 @@ var Player=enchant.Class.create(Knight,{
      this.flag=true;
     },
     action: function(){
-     if(!this.mes_win.parentNode){
+     // 表示されていなくてかつZキーが押されている途中でなければ表示
+     if(!this.mes_win.parentNode&&this.flag){
       this.mes_win.toggle_show();
      }
      if(game.input.Z){
@@ -395,7 +396,9 @@ var Player=enchant.Class.create(Knight,{
        if(this.messages[0]){
         this.mes_win.set_message(this.messages[0]);
        }else{
-        this.mes_win.toggle_show();
+        if(this.mes_win.parentNode){
+         this.mes_win.toggle_show();
+        }
        }
        this.flag=false;
       }
@@ -404,7 +407,7 @@ var Player=enchant.Class.create(Knight,{
      }
     },
     popFlag: function(){
-     return (this.messages.length==0)
+     return (this.messages.length==0)&&this.flag;
     }
   }),
   /**
