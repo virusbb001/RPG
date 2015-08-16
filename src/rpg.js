@@ -45,6 +45,15 @@ function toggle_pause(){
  paused=!paused;
 }
 
+function game_over(){
+ var gameover_scene=new Scene();
+ gameover_scene.backgroundColor="rgba(255,0,0,0.5)";
+ gameover_text=new MutableText(0,game.height/2-16/2,game.width);
+ gameover_text.setText("GAME OVER");
+ gameover_scene.addChild(gameover_text);
+ game.pushScene(gameover_scene);
+}
+
 $(function(){
  game=new Game(16*16,16*16);
  lbl=new MutableText(0,0,game.width);
