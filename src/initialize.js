@@ -350,6 +350,7 @@ var Player=enchant.Class.create(Knight,{
      }
      if(direction!==undefined){
       this.owner.pushCommand('walk',{direction: direction});
+      this.owner.pushCommand(new this.owner.walkInput(this.owner,{}));
       // 滑らかに動かすために1度actionを実行する
       if(this.owner.queue[1]!==undefined){
        this.owner.queue[1].action();
@@ -750,7 +751,7 @@ var MapScene=enchant.Class.create(enchant.Scene,{
    if(this.fgMap){
     this.addChild(this.fgMap);
    }
-   this.addChild(this.lbl);
+   // this.addChild(this.lbl);
    this.addChild(this.hpLabel);
    this.addEventListener('enterframe',function(e){
     this.enterframe();
