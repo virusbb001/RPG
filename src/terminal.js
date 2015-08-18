@@ -13,7 +13,7 @@ $(function(){
    term.echo("YOU CANNOT ");
   }
  },{
-  greetings: "Rogue Bot Manager\n<fn> + <Up>と<fn> + <Down> でスクロール",
+  greetings: "Player Management Terminal\n<fn> + <Up>と<fn> + <Down> でスクロール",
   prompt: '> ',
   enabled: true,
   checkArity: false
@@ -27,7 +27,7 @@ function enableRBM(){
  }
  var availableCmd=rpg.getTermCommands();
  term.clear();
- term.echo("Rogue Bot Manager\n<fn> + <Up>と<fn> + <Down> でスクロール");
+ term.echo("Player Management Terminal\n<fn> + <Up>と<fn> + <Down> でスクロール");
  term.push(
   function(command,term){
    var cmd=$.terminal.splitCommand(command);
@@ -38,7 +38,7 @@ function enableRBM(){
    }
   },{
   name: "RBM",
-  prompt: "RBM> ",
+  prompt: "command > ",
   onExit: function(terminal){
    window.parent.toggleConnect()
   }
