@@ -645,6 +645,27 @@ var Signboard = enchant.Class.create(MapChip,{
   }
 });
 
+/**
+ * @scope DebugMapChip.prototype
+ */
+// 乗っても無害そうなのを追加
+var DebugMapChip = enchant.Class.create(MapChip,{
+  /**
+   * @name DebugMapChip
+   * @class デバッグ用のチップ
+   * @param {Integer} x マップX座標
+   * @param {Integer} y マップY座標
+   * @extends MapChip
+   */
+  initialize: function(x,y){
+   MapChip.call(this,x,y);
+  },
+  isCollision: function(target){
+   return false;
+  }
+
+});
+
 
 /**
  * @scope CharactersList.prototype
