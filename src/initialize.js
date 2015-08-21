@@ -805,7 +805,7 @@ var MapScene=enchant.Class.create(enchant.Scene,{
    }
    if(game.height<this.bgMap.height){
     y=Math.min( (game.height )/2 - 16  - player.y, 0);
-    y=Math.may(game.height, y+this.bgMap.height) - this.bgMap.height;
+    y=Math.max(game.height, y+this.bgMap.height) - this.bgMap.height;
    }else{
     y=game.height/2-this.bgMap.height/2;
    }
