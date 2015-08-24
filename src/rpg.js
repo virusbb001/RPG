@@ -63,6 +63,7 @@ $(function(){
  game.keybind(90,"Z"); // Z
  game.keybind(88,"X"); // X
  game.keybind(67,"C"); // C
+ game.keybind(16,"shift");
 
  map_manager.set_core(game);
 
