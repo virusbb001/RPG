@@ -91,6 +91,32 @@ addCommand('walk',{
   }
 });
 
+// 向きを変えるコマンド
+// direction: 数値
+// 0: Down 1: Left 2: Right 3: Up
+addCommand('turn',{
+  /*
+   * 0: Down 1: Left 2: Right 3: Up
+   */
+  initialize: function(owner,properties){
+   Command.call(this,owner,properties);
+   if( !(properties!=undefined && properties.direction!=undefined)){
+    throw(new Error("missing property: direction"));
+   }
+   this.direction=properties.direction;
+  },
+  action: function(){
+   this.owner.direction=this.direction;
+   this.owner.state_frame=1;
+  },
+  popFlag: function(){
+   return true;
+  },
+  toString: function(){
+   return this.cmdName+" direction is "+(["down","left","right","up"])[this.direction];
+  }
+});
+
 // その場で待機するコマンド
 // count: 待つフレーム数
 addCommand('wait',{
