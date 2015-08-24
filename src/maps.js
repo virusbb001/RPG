@@ -27,6 +27,11 @@ function register_maps(game){
  surface.draw(game.assets['images/map0.png'],13*16,0,16,16,0,0,16,16);
  images.upStair=surface;
 
+ // 下り階段
+ surface=new Surface(16,16);
+ surface.draw(game.assets['images/map0.png'],14*16,0,16,16,0,0,16,16);
+ images.downStair=surface;
+
  // トゲ
  surface=new Surface(16*2,16);
  surface.draw(game.assets['images/map0.png'],0,16,16*2,16,0,0,32,16);
