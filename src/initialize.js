@@ -349,7 +349,11 @@ var Player=enchant.Class.create(Knight,{
       state=2;
      }
      if(direction!==undefined){
-      this.owner.pushCommand('walk',{direction: direction});
+      var cmd="walk";
+      if(game.input.shift){
+       cmd="turn";
+      }
+      this.owner.pushCommand(cmd,{direction: direction});
       this.owner.pushCommand(new this.owner.walkInput(this.owner,{}));
       // 滑らかに動かすために1度actionを実行する
       if(this.owner.queue[1]!==undefined){
