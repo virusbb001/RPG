@@ -111,7 +111,7 @@ function register_maps(game){
 
  })();
 
- // チュートリアル2
+ // チュートリアル
  // トゲ
  (function(){
    var backgroundMap = new Map(16, 16);
@@ -145,7 +145,7 @@ function register_maps(game){
      "ゲームオーバになった場合，\n⌘が書かれたキーを押しながら\nRキーを押して\nやり直してください"]
    );
    var spike=new Spike(3,2,2,60*3-2);
-   var stair=new Stair(5,1,1,1,"F1");
+   var stair=new Stair(5,1,1,7,"tutorial_cheat_intro");
 
    player.image=images.player;
    signboard.image=images.signboard;
@@ -166,7 +166,68 @@ function register_maps(game){
    map_manager.add_map("tutorial2",map_scene);
  })();
 
- // F2登録
+ // チュートリアル
+ (function(){
+   var backgroundMap = new Map(16, 16);
+   backgroundMap.image = game.assets['images/map1.png'];
+   backgroundMap.loadData([
+     [7,23,23,23,23,23,23,23,7],
+     [7,64,64,64,64,64,64,64,7],
+     [7,64,7,7,7,7,7,7,7],
+     [7,64,23,23,23,7,7,23,7],
+     [7,64,64,64,64,7,7,64,7],
+     [7,23,7,7,64,7,7,64,7],
+     [7,64,23,23,64,23,23,64,7],
+     [7,64,64,64,64,64,64,64,7],
+     [7,7,7,7,7,7,7,7,7]
+   ]);
+   backgroundMap.collisionData = [
+    [1,1,1,1,1,1,1,1,1],
+    [1,0,0,0,0,0,0,0,1],
+    [1,0,1,1,1,1,1,1,1],
+    [1,0,1,1,1,1,1,1,1],
+    [1,0,0,0,0,1,1,0,1],
+    [1,1,1,1,0,1,1,0,1],
+    [1,0,1,1,0,1,1,0,1],
+    [1,0,0,0,0,0,0,0,1],
+    [1,1,1,1,1,1,1,1,1]
+   ];
+
+   var player=new Player(0,0);
+   var signboard=new Signboard(1,6,[
+     "おっと，まだトゲの説明を\n指定ませんでしたね",
+     "トゲは，もしあなたの体が\nトゲに少しでも乗っていたら，\n1フレームにあたり\nあなたの体力(HP)を\n1減らします",
+     "フレームとは，\nこの世界が進む単位のことで，\n全てのキャラクターは\n1フレームごとに\n状態が変わります\n例えば，キャラクターは\n1フレームに1/4マス進みます",
+     "さて，\n上の階段に行く道は難しく，\nこのままでは\nクリアできないかもしれません",
+     "しかし，もしあなたが\n上の階段に行くことが出来れば\n今後全てのチュートリアルを\n飛ばして本編に\n行くことが出来ます",
+     "もし自力で行くことが\n難しければ，右の階段に\nお進みください"
+   ]);
+   var spikes=new Array();
+   var toUp=new Stair(7,1,1,1,"F1"); // TODO: "move to Do you know?"
+   var toDown=new Stair(7,4,1,1,"F3"); // TODO: you dirty cheater
+
+   // TODO: トゲ設定
+
+   player.image=images.player;
+   signboard.image=images.signboard;
+   toUp.image=images.upStair;
+   toDown.image=images.downStair;
+
+   var map_scene=new MapScene(player,backgroundMap);
+   map_scene.addCharacters(signboard);
+   map_scene.addCharacters(toUp);
+   map_scene.addCharacters(toDown);
+   map_scene.availableChara={
+    player: player,
+    spikes: spikes,
+    toUp: toUp,
+    toDown: toDown
+   };
+
+   map_manager.add_map("tutorial_cheat_intro",map_scene);
+ })();
+
+ // F3登録
  (function(){
    var backgroundMap = new Map(16, 16);
    backgroundMap.image = game.assets['images/map1.png'];
