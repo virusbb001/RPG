@@ -1,6 +1,5 @@
-var game,map_manager;
+var game,map_manager,commands;
 
-var player,backgroundMap,mob,commands,mob2,spike,stair;
 // 最初のマップ
 var pause_scene,pause_text;
 // キャラクター用配列
