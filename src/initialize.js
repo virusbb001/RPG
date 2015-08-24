@@ -490,7 +490,7 @@ var MoveBot=enchant.Class.create(Human,{
 var Spike=enchant.Class.create(MapChip,{
   /**
    * @name Spike
-   * @class トゲクラス onの時に通れずoffの時に通れる
+   * @class トゲクラス onの時に通れずoffの時に通れる 初期状態off
    * @param {Integer} x マップX座標
    * @param {Integer} y マップY座標
    * @param {Integer} on_time statusがtrueの時の時間(1以上)
@@ -508,6 +508,7 @@ var Spike=enchant.Class.create(MapChip,{
    }
    this.on_time=on_time;
    this.off_time=off_time;
+   // TODO: stateを変えたらframeを変えるようにしてもいいかもしれない
    this.state=false;
    this.frame=1;
    this.addEventListener("precommand",function(){
@@ -542,7 +543,7 @@ var Spike=enchant.Class.create(MapChip,{
    var res=this.parentNode.checkHit(this);
    res.forEach(function(val){
     if(val.damage){
-     val.damage(0.125);
+     val.damage(1);
     }
    });
   },
