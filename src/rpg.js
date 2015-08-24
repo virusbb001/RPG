@@ -10,6 +10,7 @@ function toggle_pause(){
  var message_list=
   ([
    "GAME PAUSED",
+   "PAUSE AHEAD"
    /*
    "HELP",
    "LOL U DIED",
@@ -18,7 +19,6 @@ function toggle_pause(){
    "ACCESS DENIED",
    "YOU LOSE",
    "GAME OVER",
-   "PAUSE AHEAD",
    "TYPE THE COMMAND",
    "$ SHUTDOWN",
    "TOO COLD",
@@ -34,7 +34,8 @@ function toggle_pause(){
   game.popScene();
   game.resume()
  }else{
-  var text=message_list[Math.floor(Math.random()*message_list.length)];
+  // var text=message_list[Math.floor(Math.random()*message_list.length)];
+  var text=message_list[Math.floor(Math.random()*1000)==0? 1: 0];
   pause_text.setText(text);
   pause_text.x=game.width/2-text.length*16/2;
   game.pushScene(pause_scene);
