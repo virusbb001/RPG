@@ -56,9 +56,6 @@ function termCommands(){
     }
    };
   })(),
-  watch: function(){
-   player.pushCommand("watch",{});
-  }
  };
 
  return termObj;
@@ -102,6 +99,27 @@ function getTermCommands(){
     }
    }
   },
+  turn: function(dir){
+   var player=chara.player;
+   var directionStr=["down","left","right","up"];
+   if(arguments.length<1 || dir == "help"){
+    this.echo("turn *direction* [times]")
+    this.echo("方向を変える");
+    this.echo("引数");
+    this.echo("direction down: 下 left: 左 right: 右 up: 上");
+   }else{
+    var direction=dir-0;
+    if(isNaN(direction)){
+     direction=directionStr.indexOf(dir.toLowerCase());
+    }
+    if(direction < 0 || 3< direction){
+     this.echo("方向の指定がおかしい");
+    }else{
+     player.pushCommand('turn',{direction: direction});
+     this.echo("turn "+directionStr[direction]+"を追加" );
+    }
+   }
+  },
   attack: function(times){
    var player=chara.player;
    if(times === "help"){
@@ -113,6 +131,11 @@ function getTermCommands(){
     player.pushCommand('attack');
    }
    this.echo("attackを" + (times > 1 ? times + "回" : "") + "追加");
+  },
+  watch: function(){
+   var player=chara.player;
+   player.pushCommand("watch",{});
+   this.echo("watchを追加");
   }
  };
 
