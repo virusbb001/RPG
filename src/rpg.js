@@ -72,7 +72,6 @@ $(function(){
   game.rootScene.backgroundColor="#000000";
   register_maps(game);
   map_manager.move_player(["F1"],1,1);
-  player=game.currentScene.player;
 
   // ポーズ設定
   pause_scene=new Scene();
@@ -111,4 +110,10 @@ function mes_debug_array(){
   message.push(arguments[i]);
  }
  return message;
+}
+
+function debug_player(){
+ var now_map_id=map_manager.now_map
+ var chara=map_manager.map_list[now_map_id].availableChara;
+ return chara.player;
 }
