@@ -271,6 +271,7 @@ var Knight=enchant.Class.create(Human,{
    * @class chara5,chara7の形式の画像に使うHuman
    * @param {Integer} x マップX座標
    * @param {Integer} y マップY座標
+   * @constructs
    * @extends Human
    */
   initialize: function(x,y){
@@ -280,7 +281,8 @@ var Knight=enchant.Class.create(Human,{
    this.state_length=3;
   },
   /**
-   * 今何をしているか 何もしていない: 0, 盾: 1 , 剣:2
+   * 今何をしているか 何もしていない: 0, 盾: 1 , 剣:2.
+   * @type Integer
    */
   state: {
    get: function(){
@@ -290,15 +292,19 @@ var Knight=enchant.Class.create(Human,{
     this._state=state;
     var state_frame=this.frame%this.state_length;
     this.frame=this.frame-this.frame%this.direction_frame+(state*this.state_length+state_frame);
-   },
+   }
   },
+  /**
+   * 内部フレーム番号 frameを変更するのに使用
+   * @type Integer
+   */
   state_frame: {
+   get: function(){
+    return this._state_frame;
+   },
    set: function(state_frame){
     this._state_frame=state_frame;
     this.frame=this.frame-(this.frame%this.state_length)+state_frame;
-   },
-   get: function(){
-    return this._state_frame;
    }
   }
 });
