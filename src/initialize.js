@@ -116,10 +116,15 @@ var Character=enchant.Class.create(enchant.Sprite,{
    * @param {Integer} [option.y] 自身のY座標をyとして判定
    * @param {Integer} [option.targetX] 対象のX座標をtargetXとして判定
    * @param {Integer} [option.targetY] 対象のY座標をtargetYとして判定
+   * @param {Integer} [option.ignoreCollision] 衝突判定フラグを無視して判定する
    * @returns {Boolean} 重なっているか否か
    */
   hitTest: function(target,option){
    option = option || {};
+   var ignoreCollision;
+   if(option.ignoreCollision){
+    ignoreCollision=!!option.ignoreCollision;
+   }
    var x,y;
    var targetX,targetY;
    x=(option.x != null)? option.x : this.x;
@@ -135,7 +140,7 @@ var Character=enchant.Class.create(enchant.Sprite,{
    targetY+=target.offsetY;
 
    // <=にしないのは隣通しでも重なっていると判定されるようになってしまうため
-   return (this.isCollision(targetX)&&target.isCollision(this))&&(x < targetX+16 && targetX < x +16 && y < targetY+16 && targetY < y+16);
+   return (ignoreCollision || (this.isCollision(targetX)&&target.isCollision(this)))&&(x < targetX+16 && targetX < x +16 && y < targetY+16 && targetY < y+16);
   },
   /**
    * mapX,mapYのみの比較のみで当たり判定を行う関数
