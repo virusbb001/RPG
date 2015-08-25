@@ -148,38 +148,48 @@ addCommand('think',{
 });
 
 addCommand('watch',{
+  initialize: function(owner,properties){
+   Command.call(this,owner,properties);
+   this.flag=false;
+   this.spike=undefined;
+  },
   action: function(){
    // var res=this.owner.parentNode.checkHit(this.owner);
-   var dir=this.owner.direction;
-   var x=0;
-   var y=0;
-   switch(dir){
-   case 0:
-    y=1;
-    break;
-   case 1:
-    x=-1;
-    break;
-   case 2:
-    x=1;
-    break;
-   case 3:
-    y=-1;
-    break;
-   }
-   var dummy=new Character(0,0,0,0,16,16);
-   dummy.move_map(this.owner.mapX+x,this.owner.mapY+y);
-   var res=this.owner.parentNode.checkHit(dummy,{},{ignoreCollision: true});
-   res.forEach(function(target){
+   if(!this.spike){
+    var dir=this.owner.direction;
+    var x=0;
+    var y=0;
+    switch(dir){
+    case 0:
+     y=1;
+     break;
+    case 1:
+     x=-1;
+     break;
+    case 2:
+     x=1;
+     break;
+    case 3:
+     y=-1;
+     break;
+    }
+    var dummy=new Character(0,0,0,0,16,16);
+    dummy.move_map(this.owner.mapX+x,this.owner.mapY+y);
+    var res=this.owner.parentNode.checkHit(dummy,{},{ignoreCollision: true});
+    var target=res[0];
     if(target instanceof Spike){
-     console.log(target.state);
+     this.spike=target;
     }else{
      console.log(target);
+     this.flag=true;
     }
-   });
+   }
+   if(this.spike && this.spike.queue[0] instanceof this.spike.toggle_on_off && this.spike.state){
+    this.flag=true;
+   }
   },
   popFlag:function(){
-   return true;
+   return this.flag;
   }
 });
 
