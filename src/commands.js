@@ -169,7 +169,7 @@ addCommand('watch',{
    }
    var dummy=new Character(0,0,0,0,16,16);
    dummy.move_map(this.owner.mapX+x,this.owner.mapY+y);
-   var res=this.owner.parentNode.checkHit(dummy);
+   var res=this.owner.parentNode.checkHit(dummy,{},{ignoreCollision: true});
    res.forEach(function(target){
     if(target instanceof Spike){
      console.log(target.state);
