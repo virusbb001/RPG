@@ -61,7 +61,7 @@ function termCommands(){
  return termObj;
 }
 
-function getTermCommands(){
+function getTermCommands(undefined){
  // 呼び出される時はtermObj[command].apply(term,args)
  var now_map_id=map_manager.now_map
  var chara=map_manager.map_list[now_map_id].availableChara;
@@ -134,8 +134,13 @@ function getTermCommands(){
   },
   watch: function(){
    var player=chara.player;
-   player.pushCommand("watch",{});
-   this.echo("watchを追加");
+   if(arguments[0] === "help"){
+    this.echo("help");
+    this.echo("今向いている方向のトゲが引っ込んだ瞬間になるまでその場で待つ");
+   }else{
+    player.pushCommand("watch",{});
+    this.echo("watchを追加");
+   }
   }
  };
 
