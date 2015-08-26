@@ -129,6 +129,9 @@ addCommand('wait',{
   },
   popFlag:function(){
    return !(this.count>0);
+  },
+  toString: function(){
+   return this.cmdName+" "+this.count;
   }
 });
 
