@@ -774,6 +774,8 @@ var CharactersList=enchant.Class.create(enchant.Group,{
    * コマンドを実行する関数
    */
   execEachCommand: function(){
+   var ul=$("#now_commands > ul");
+   ul.children("li").remove();
    this.childNodes.forEach(function(val,index,nodes){
     var e=new enchant.Event("precommand");
     val.dispatchEvent(e);
@@ -783,8 +785,27 @@ var CharactersList=enchant.Class.create(enchant.Group,{
     // postcommand
     e=new enchant.Event("postcommand");
     val.dispatchEvent(e);
-
    });
+   var charas=this.parentNode.availableChara;
+   var f=function(chara,name){
+    var str=name+": ";
+    if(chara.queue.length==0){
+     str+="!stack none";
+    }else{
+     str+=chara.queue[0].toString();
+    }
+    var li=$(document.createElement("li")).text(str);
+    ul.append(li);
+   }
+   for(var name in charas){
+    if(charas[name] instanceof Array){
+     charas[name].forEach(function(chara,index){
+      f(chara,name+" #"+index);
+     });
+    }else{
+     f(charas[name],name);
+    }
+   }
   }
 });
 
