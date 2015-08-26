@@ -142,6 +142,19 @@ function getTermCommands(undefined){
     this.echo("watchを追加");
    }
   },
+  wait: function(frames){
+   var player=chara.player;
+   frames=frames-0;
+   if(arguments.length<1 || frames === "help"){
+    this.echo("wait *frames*");
+    this.echo("framesで指定したフレーム数だけその場で待機する");
+   }else if(isNaN(frames)){
+    this.echo("framesが数値でない");
+   }else{
+    player.pushCommand("wait",{count: frames});
+    this.echo("wait "+frames+"を追加");
+   }
+  },
   queue: function(){
    if(arguments[0] === "help"){
     this.echo("queue");
