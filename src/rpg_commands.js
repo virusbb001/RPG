@@ -141,6 +141,18 @@ function getTermCommands(undefined){
     player.pushCommand("watch",{});
     this.echo("watchを追加");
    }
+  },
+  queue: function(){
+   if(arguments[0] === "help"){
+    this.echo("queue");
+    this.echo("現在のプレイヤーキャラクターへの指示を表示する");
+    return;
+   }
+   var player=chara.player;
+   var self=this;
+   player.queue.forEach(function(cmd,index){
+    self.echo(index+" : "+cmd.toString());
+   });
   }
  };
 
