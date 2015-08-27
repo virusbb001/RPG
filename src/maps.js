@@ -167,6 +167,7 @@ function register_maps(game){
  })();
 
  // チュートリアル
+ // チートイントロ/スキップ
  (function(){
    var backgroundMap = new Map(16, 16);
    backgroundMap.image = game.assets['images/map1.png'];
@@ -207,6 +208,31 @@ function register_maps(game){
    var toDown=new Stair(7,4,1,1,"F3"); // TODO: you dirty cheater
 
    // TODO: トゲ設定
+   (function(){
+     // [x,y,first_wait,on,off]
+     var spike_pos=[
+      [4,6],
+      [4,4,0],
+      [3,4,4], // 4つ送れてon 
+      [2,4,8],
+      [1,3,0,0],
+      [1,1,0,0],
+      [2,1,4,0],
+      // [3,1,8,0],
+      [4,1,16,0]]; // なぜかこれで2フレームズレる
+     spike_pos.forEach(function(pos){
+      var x=pos[0];
+      var y=pos[1];
+      var on=pos[3];
+      var off=pos[4];
+      var spike=new Spike(x,y,(on===undefined)? 6 : on ,(off===undefined)? 6 : off);
+      if(pos[2]){
+       spike.pushCommand("wait",{count: pos[2]});
+      }
+      spike.image=images.spike;
+      spikes.push(spike);
+     });
+   })();
 
    player.image=images.player;
    signboard.image=images.signboard;
@@ -217,6 +243,9 @@ function register_maps(game){
    map_scene.addCharacters(signboard);
    map_scene.addCharacters(toUp);
    map_scene.addCharacters(toDown);
+   spikes.forEach(function(spike){
+    map_scene.addCharacters(spike);
+   });
    map_scene.availableChara={
     player: player,
     spikes: spikes,
@@ -292,7 +321,7 @@ function register_maps(game){
    spike: spike,
    stair: stair,
    dummy: dummy,
-  }
+  };
 
   map_manager.add_map("F3",map_scene);
  })();
