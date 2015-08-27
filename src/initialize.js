@@ -438,7 +438,7 @@ var Player=enchant.Class.create(Knight,{
   },
   damage: function(damage_val){
    this.hp-=damage_val;
-   if(this.hp<0){
+   if(this.hp<=0){
     this.hp=0;
     game_over();
    }
