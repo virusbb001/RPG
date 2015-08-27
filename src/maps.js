@@ -227,10 +227,9 @@ function register_maps(game){
      "もし自力で行くことが\n難しければ，右の階段に\nお進みください"
    ]);
    var spikes=new Array();
-   var toUp=new Stair(7,1,1,1,"F1"); // TODO: "move to Do you know?"
+   var toUp=new Stair(7,1,1,2,"tutorial_compete");
    var toDown=new Stair(7,4,1,3,"tutorial_cheat_walk");
 
-   // TODO: トゲ設定
    (function(){
      // [x,y,first_wait,on,off]
      var spike_pos=[
@@ -336,7 +335,7 @@ function register_maps(game){
      "walk left\nwalk down\nとすると\n左に1マス\n下に1マス\n歩かせることが出来ます",
      "upで上，downで下\nleftで左，rightで右\nに移動できます\nこれまでのことを\n組み合わせて階段まで\n歩かせてみましょう！\n最後にexitするのを\nお忘れなく"
    ]);
-   var stair=new Stair(1,5,1,1,"F1");
+   var stair=new Stair(1,5,1,2,"tutorial_watch");
 
    player.image=images.player;
    signboard.image=images.signboard;
@@ -355,6 +354,236 @@ function register_maps(game){
 
    map_manager.add_map("tutorial_cheat_walk",map_scene);
  })();
+
+ // チュートリアル watch
+ (function(){
+  // map
+  // ここにマップを追加
+  var backgroundMap = new Map(16, 16);
+  backgroundMap.image = game.assets['images/map1.png'];
+  backgroundMap.loadData([
+    [7,23,7,7,7,7,7],
+    [7,64,23,23,23,23,7],
+    [7,64,64,64,64,64,7],
+    [7,7,7,23,23,64,7],
+    [7,7,7,64,64,64,7],
+    [7,23,23,64,7,64,7],
+    [7,64,64,64,7,7,7],
+    [7,7,7,7,7,7,7]
+   ],[
+    [-1,-1,-1,-1,-1,-1,-1],
+    [-1,-1,-1,-1,-1,-1,-1],
+    [-1,-1,-1,-1,-1,-1,-1],
+    [-1,-1,-1,-1,-1,-1,-1],
+    [-1,-1,-1,-1,-1,-1,-1],
+    [-1,-1,-1,-1,-1,-1,-1],
+    [-1,-1,-1,-1,-1,-1,-1],
+    [-1,-1,-1,-1,-1,-1,-1]
+  ]);
+  backgroundMap.collisionData = [
+    [1,1,1,1,1,1,1],
+    [1,0,1,1,1,1,1],
+    [1,0,0,0,0,0,1],
+    [1,1,1,1,1,0,1],
+    [1,1,1,0,0,0,1],
+    [1,1,1,0,1,0,1],
+    [1,0,0,0,1,1,1],
+    [1,1,1,1,1,1,1]
+   ];
+
+  // player
+  var player=new Player(1,2);
+  player.image=images.player;
+  // キャラクターを以下に
+  var stair=new Stair(1,6,1,7,"tutorial_spike_hell_again");
+  stair.image=images.upStair;
+  var spikes=[];
+  spikes[0]=new Spike(3,2,6,6);
+  spikes[1]=new Spike(3,5,0,6);
+  spikes[2]=new Spike(3,6,0,6);
+  spikes[2].pushCommand("wait",{count: 4});
+  spikes.forEach(function(spike){
+   spike.image=images.spike;
+  });
+  var watch_intro=new Signboard(1,1,[
+    "あなたはゲーム外から\n歩く方法を学びました",
+    "しかし，このままでは\nカーソルキーを使うほうが\n楽でしょう",
+    "そこで，walkコマンドと\n組み合わせて使う\nwatchコマンド\nについてお教えします",
+    "watchコマンドは，\nPCが向いている方向に\nトゲがあった場合，\nトゲが *出てから* *引っ込んだ* \n 瞬間になるまで\nその場で待機するコマンドです",
+    "watchコマンドの後に\nwalkコマンドを入力することで\n安全に通り抜けられます",
+    "試しに，すぐ右にある\nトゲの横で\nwatch\nwalk right 2\nと指示してみましょう\nダメージ無く\n通り抜けられるはずです"
+  ]);
+  watch_intro.image=images.signboard;
+  var turn_and_run=new Signboard(5,5,[
+    "この看板が最後の\nチュートリアルです",
+    "左のようにトゲが\n並んでいるものは\n待っている余裕はないので\nそのまま通ってしまいましょう",
+    "とはいえ，\n上の方のトゲを\nwatchするために\nトゲの方向を向こうとすると\n移動してトゲの上に\n乗ってしまってダメージを\n受けてしまいます",
+    "そこで，移動せずにその場で\n方向転換する方法を\nお教えします",
+    "Shiftキーを押しながら\nカーソルキーを押してください\nこれで移動せずに\n方向だけを変えることが\n出来ます",
+    "また，turnコマンド\nでも方向を変えることが\nできます",
+    "頑張って通り抜けて\nください！"
+  ]);
+  turn_and_run.image=images.signboard;
+
+  // map_scene追加
+  var map_scene=new MapScene(player,backgroundMap);
+  // 以下プレイヤー以外のキャラクターを追加
+  // map_scene.addCharacters(charas);
+  map_scene.addCharacters(stair);
+  map_scene.addCharacters(watch_intro);
+  map_scene.addCharacters(turn_and_run);
+  spikes.forEach(function(spike){
+   map_scene.addCharacters(spike);
+  });
+  map_scene.availableChara={
+   player: player,
+   spikes: spikes,
+  };
+
+  // マップ登録
+  map_manager.add_map("tutorial_watch",map_scene);
+ })();
+
+ // spike hell again
+ (function(){
+   var backgroundMap = new Map(16, 16);
+   backgroundMap.image = game.assets['images/map1.png'];
+   backgroundMap.loadData([
+     [7,23,23,23,23,23,23,23,7],
+     [7,64,64,64,64,64,64,64,7],
+     [7,64,7,7,7,7,7,7,7],
+     [7,64,23,23,23,7,7,23,7],
+     [7,64,64,64,64,7,7,64,7],
+     [7,23,7,7,64,7,7,64,7],
+     [7,64,23,23,64,23,23,64,7],
+     [7,64,64,64,64,64,64,64,7],
+     [7,7,7,7,7,7,7,7,7]
+   ]);
+   backgroundMap.collisionData = [
+    [1,1,1,1,1,1,1,1,1],
+    [1,0,0,0,0,0,0,0,1],
+    [1,0,1,1,1,1,1,1,1],
+    [1,0,1,1,1,1,1,1,1],
+    [1,0,0,0,0,1,1,0,1],
+    [1,1,1,1,0,1,1,0,1],
+    [1,0,1,1,0,1,1,0,1],
+    [1,0,0,0,0,0,0,0,1],
+    [1,1,1,1,1,1,1,1,1]
+   ];
+
+   var player=new Player(0,0);
+   var signboard=new Signboard(1,6,[
+     "これが最後です",
+     "頑張って奥の階段\nまで行きましょう！",
+     "右の階段に行くと\nチュートリアルをやり直せます"
+   ]);
+   var spikes=new Array();
+   var toUp=new Stair(7,1,1,2,"tutorial_compete");
+   var toDown=new Stair(7,4,1,3,"tutorial_cheat_walk"); // again
+
+   (function(){
+     // [x,y,first_wait,on,off]
+     var spike_pos=[
+      [4,6],
+      [4,4,0],
+      [3,4,4], // 4つ送れてon 
+      [2,4,8],
+      [1,3,0,0],
+      [1,1,0,0],
+      [2,1,4,0],
+      // [3,1,8,0],
+      [4,1,16,0]]; // なぜかこれで2フレームズレる
+     spike_pos.forEach(function(pos){
+      var x=pos[0];
+      var y=pos[1];
+      var on=pos[3];
+      var off=pos[4];
+      var spike=new Spike(x,y,(on===undefined)? 6 : on ,(off===undefined)? 6 : off);
+      if(pos[2]){
+       spike.pushCommand("wait",{count: pos[2]});
+      }
+      spike.image=images.spike;
+      spikes.push(spike);
+     });
+   })();
+
+   player.image=images.player;
+   signboard.image=images.signboard;
+   toUp.image=images.upStair;
+   toDown.image=images.downStair;
+
+   var map_scene=new MapScene(player,backgroundMap);
+   map_scene.addCharacters(signboard);
+   map_scene.addCharacters(toUp);
+   map_scene.addCharacters(toDown);
+   spikes.forEach(function(spike){
+    map_scene.addCharacters(spike);
+   });
+   map_scene.availableChara={
+    player: player,
+    spikes: spikes,
+    toUp: toUp,
+    toDown: toDown
+   };
+
+   map_manager.add_map("tutorial_spike_hell_again",map_scene);
+ })();
+
+ // tutorial compete
+ (function(){
+  // map
+  // ここにマップを追加
+  var backgroundMap = new Map(16, 16);
+  backgroundMap.image = game.assets['images/map1.png'];
+  backgroundMap.loadData([
+    [7,23,7,7,7,7,7],
+    [7,64,23,23,23,23,7],
+    [7,64,64,64,64,64,7],
+    [7,7,7,7,7,7,7],
+    [7,7,7,7,7,7,7]
+   ],[
+    [-1,-1,-1,-1,-1,-1,-1],
+    [-1,-1,-1,-1,-1,-1,-1],
+    [-1,-1,-1,-1,-1,-1,-1],
+    [-1,-1,-1,-1,-1,-1,-1],
+    [-1,-1,-1,-1,-1,-1,-1]
+  ]);
+  backgroundMap.collisionData = [
+    [1,1,1,1,1,1,1],
+    [1,0,1,1,1,1,1],
+    [1,0,0,0,0,0,1],
+    [1,1,1,1,1,1,1],
+    [1,1,1,1,1,1,1]
+   ];
+
+  // player
+  var player=new Player(0,0);
+  player.image=images.player;
+  // キャラクターを以下に
+  var signboard=new Signboard(1,1,[
+    "チュートリアルお疲れ様でした",
+    "本番ですが，\n次にあるのは迷路です",
+    "しかし，至る所の\n角にトゲが有ります\nかわして\n右下のゴールまで\n向かってください",
+    "頑張ってください!",
+  ]);
+  signboard.image=images.signboard;
+  var stair=new Stair(5,2,1,1,"maze");
+  stair.image=images.upStair;
+
+  // map_scene追加
+  var map_scene=new MapScene(player,backgroundMap);
+  // 以下プレイヤー以外のキャラクターを追加
+  // map_scene.addCharacters(charas);
+  map_scene.addCharacters(signboard);
+  map_scene.addCharacters(stair);
+  map_scene.availableChara={
+   player: player,
+  };
+
+  // マップ登録
+  map_manager.add_map("tutorial_compete",map_scene);
+ })();
+
 
  // F3登録
  (function(){
@@ -430,12 +659,14 @@ function register_maps(game){
  (function(){
    var map=RPG_Util.convertMaze2Map(RPG_Util.generateMaze(21,21));
    map.image=game.assets['images/map1.png'];
+
    var player=new Player(1,1);
    player.image=images.player;
    var spikes=new Array();
    var maze=map.collisionData;
    var width=maze.length;
    var height=maze[0].length;
+   // TODO:トゲ指定
    for(var i=0;i<Math.floor((maze.length)/2);i++){
     for(var j=0;j<Math.floor((maze[i].length)/2);j++){
      var x=j*2+1;
@@ -451,14 +682,21 @@ function register_maps(game){
      var corner=(!maze[y][x-1] || !maze[y][x+1]) && (!maze[y-1][x] || !maze[y+1][x]);
      if(corner && Math.floor(Math.random()*3)<1){
       // 角のところに1/3の確率で追加
-      var spike=new DebugMapChip(x,y);
-      spike.image=images.flower;
+      var spike=new Spike(x,y,0,6);
+      var count=Math.floor(Math.random()*5);
+      spike.image=images.spike;
+      if(count){
+       spike.pushCommand("wait",{count: count});
+      }
       spikes.push(spike);
      }
     }
    }
+   var stair=new Stair(19,19,2,2,"game_clear");
+   stair.image=images.upStair;
 
    var map_scene=new MapScene(player,map);
+   map_scene.addCharacters(stair);
 
    spikes.forEach(function(spike){
     map_scene.addCharacters(spike);
@@ -470,6 +708,54 @@ function register_maps(game){
    };
 
    map_manager.add_map("maze",map_scene);
+ })();
 
+ (function(){
+  // map
+  // ここにマップを追加
+  var backgroundMap = new Map(16, 16);
+  backgroundMap.image = game.assets['images/map1.png'];
+  backgroundMap.loadData([
+    [7,23,23,23,7],
+    [7,64,64,64,7],
+    [7,64,64,64,7],
+    [7,64,64,64,7],
+    [7,7,7,7,7]
+   ],[
+    [-1,-1,-1,-1,-1],
+    [-1,-1,-1,-1,-1],
+    [-1,-1,-1,-1,-1],
+    [-1,-1,-1,-1,-1],
+    [-1,-1,-1,-1,-1]
+  ]);
+  backgroundMap.collisionData = [
+    [0,0,0,0,0],
+    [0,0,0,0,0],
+    [0,0,0,0,0],
+    [0,0,0,0,0],
+    [0,0,0,0,0]
+   ];
+
+  // player
+  var player=new Player(0,0);
+  player.image=images.player;
+  // キャラクターを以下に
+  var signboard=new Signboard(2,1,[
+    "ゲームクリア\nおめでとうございます!",
+    "このゲームはまだ\n未完成です\nもし気に入ったら\n感想をお願いいたします!\n感想は下の\"感想\"と\nかかれたところを\nクリックして感想を\n書き込んでください"
+  ]);
+  signboard.image=images.signboard;
+
+  // map_scene追加
+  var map_scene=new MapScene(player,backgroundMap);
+  // 以下プレイヤー以外のキャラクターを追加
+  // map_scene.addCharacters(charas);
+  map_scene.addCharacters(signboard);
+  map_scene.availableChara={
+   player: player,
+  };
+
+  // マップ登録
+  map_manager.add_map("game_clear",map_scene);
  })();
 };
