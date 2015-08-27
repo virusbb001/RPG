@@ -50,6 +50,8 @@ function register_maps(game){
  (function(){
   // map
   // ここにマップを追加
+  var backgroundMap = new Map(16, 16);
+  backgroundMap.image = game.assets['images/map1.png'];
 
   // player
   var player=new Player(0,0);
@@ -130,7 +132,6 @@ function register_maps(game){
    };
 
    map_manager.add_map("F1",map_scene);
-
  })();
 
  // チュートリアル
@@ -227,7 +228,7 @@ function register_maps(game){
    ]);
    var spikes=new Array();
    var toUp=new Stair(7,1,1,1,"F1"); // TODO: "move to Do you know?"
-   var toDown=new Stair(7,4,1,1,"F3"); // TODO: you dirty cheater
+   var toDown=new Stair(7,4,1,3,"tutorial_cheat_walk");
 
    // TODO: トゲ設定
    (function(){
@@ -276,6 +277,83 @@ function register_maps(game){
    };
 
    map_manager.add_map("tutorial_cheat_intro",map_scene);
+ })();
+
+ // チュートリアル
+ // 歩かせる
+ (function(){
+   var backgroundMap = new Map(16, 16);
+   backgroundMap.image = game.assets['images/map1.png'];
+
+   backgroundMap.loadData([
+     [7,7,7,64,23,23,23,7],
+     [7,23,7,64,64,64,64,7],
+     [7,64,23,64,23,7,64,7],
+     [7,64,64,64,64,7,64,7],
+     [7,23,23,23,23,23,64,7],
+     [7,64,64,64,64,64,64,7],
+     [7,7,7,7,7,7,7,7]
+    ],[
+     [-1,-1,-1,-1,-1,-1,-1,-1],
+     [-1,-1,-1,-1,-1,-1,-1,-1],
+     [-1,-1,-1,-1,-1,-1,-1,-1],
+     [-1,-1,-1,-1,-1,-1,-1,-1],
+     [-1,-1,-1,-1,-1,-1,-1,-1],
+     [-1,-1,-1,-1,-1,-1,-1,-1],
+     [-1,-1,-1,-1,-1,-1,-1,-1]
+   ]);
+   backgroundMap.collisionData = [
+    [1,1,1,0,1,1,1,1],
+    [1,1,1,0,0,0,0,1],
+    [1,0,1,0,1,1,0,1],
+    [1,0,0,0,0,1,0,1],
+    [1,1,1,1,1,1,0,1],
+    [1,0,0,0,0,0,0,1],
+    [1,1,1,1,1,1,1,1]
+   ];
+
+   var player=new Player(1,3);
+   var signboard=new Signboard(1,2,[
+     "チュートリアルステージへ\nようこそ!",
+     "ここでは，ゲームの外から\nゲームへの干渉を行う\n方法を教えます．",
+     "試しに，左上の\"esc\"と\n書かれたキーを押した後，\n'e','x','i','t'と\n書かれたキーを順番に押し，\n次に右にある'enter'と\n書かれたキーを押した後，\nZキーを押して進めてください．",
+     "escキーを押した時に\n出てきたものが\nゲームの外からゲームへ\n操作を行うものです．",
+     "これはコマンドの入力によって\nあなたの操作する\nプレイヤーキャラクター\n(以降PC)に\n指示を出すものです．",
+     "もしメッセージを\n読んでいる時に\n操作を指示した場合，\nメッセージを読み終えてから\n指示が実行されます",
+     "手始めに，PCをカーソルキーを\n*使わずに* 移動させて\nみましょう",
+     "escキーを押し，\n\"walk right\"と入力して\nPCを右に移動するように\n指示します\n最後にenterキーを押して\nexitと入力して\nenterキーを押すのを\n忘れないで下さい！\nこれを看板にぶつかるまで\n繰り返してください\n看板にぶつかったら，\nその看板をXキーで調べてください．"
+   ]);
+
+   var walk_manytime=new Signboard(4,3,[
+     "素晴らしい!\nあなたはカーソルキーを\n使わずにPCを右に1マス\n動かすことに成功しました!\nもしカーソルキーを\n使って移動した場合\n左の看板まで戻って\nやり直すことを\nおすすめします",
+     "walkコマンドは回数を指定して\n移動させることも出来ます\n",
+     "walk up 2\nで上(up)に2回移動させるように\n指示することが出来ます\n最後にenterキーを\n押してexitすることを\n忘れないように\n気をつけましょう\n"
+   ]);
+
+   var continuous_instruction=new Signboard(3,0,[
+     "おめでとうございます！\nあなたは回数を指定して\nPCを歩かせること\nに成功しました\n",
+     "では，このまま右・下・左\nと続けて動かしてみましょう\n",
+     "walk left\nwalk down\nとすると\n左に1マス\n下に1マス\n歩かせることが出来ます",
+     "upで上，downで下\nleftで左，rightで右\nに移動できます\nこれまでのことを\n組み合わせて階段まで\n歩かせてみましょう！\n最後にexitするのを\nお忘れなく"
+   ]);
+   var stair=new Stair(1,5,1,1,"F1");
+
+   player.image=images.player;
+   signboard.image=images.signboard;
+   walk_manytime.image=images.signboard;
+   stair.image=images.upStair;
+   continuous_instruction.image=images.signboard;
+
+   var map_scene=new MapScene(player,backgroundMap);
+   map_scene.addCharacters(signboard);
+   map_scene.addCharacters(walk_manytime);
+   map_scene.addCharacters(continuous_instruction);
+   map_scene.addCharacters(stair);
+   map_scene.availableChara={
+    player: player,
+   };
+
+   map_manager.add_map("tutorial_cheat_walk",map_scene);
  })();
 
  // F3登録
