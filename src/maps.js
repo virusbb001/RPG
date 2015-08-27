@@ -46,6 +46,28 @@ function register_maps(game){
  surface.draw(game.assets['images/map0.png'],16*2,16,16,16,0,0,16,16);
  images.flower=surface;
 
+ /*
+ (function(){
+  // map
+  // ここにマップを追加
+
+  // player
+  var player=new Player(0,0);
+  player.image=images.player;
+  // キャラクターを以下に
+
+  // map_scene追加
+  var map_scene=new MapScene(player,backgroundMap);
+  // 以下プレイヤー以外のキャラクターを追加
+  // map_scene.addCharacters(charas);
+  map_scene.availableChara={
+   player: player,
+  };
+
+  // マップ登録
+  map_manager.add_map("map_name",map_scene);
+ })();
+ */
 
  // 最初のマップ
  // チュートリアル: 看板・階段・調べる
