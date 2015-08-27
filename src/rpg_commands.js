@@ -158,7 +158,7 @@ function getTermCommands(undefined){
   queue: function(){
    if(arguments[0] === "help"){
     this.echo("queue");
-    this.echo("現在のプレイヤーキャラクターへの指示を表示する");
+    this.echo("現在のプレイヤーキャラクターへの指示のリストを表示する");
     return;
    }
    var player=chara.player;
@@ -166,6 +166,33 @@ function getTermCommands(undefined){
    player.queue.forEach(function(cmd,index){
     self.echo(index+" : "+cmd.toString());
    });
+  },
+  remove: function(index){
+   var player=chara.player;
+   if(index==="help"){
+    this.echo("remove *index*");
+    this.echo("指示リストから指示を消す");
+    return 0;
+   }
+   var i=index-0;
+   if(isNaN(i)){
+    this.echo("indexが数値でない");
+   }else{
+    if(player.queue[index]){
+     var arr=player.queue.splice(index,1);
+     this.echo(""+index+": "+arr[0].toString()+"を削除");
+    }else{
+     this.echo("indexの値が正しくない");
+    }
+   }
+  },
+  fps: function(fps){
+   if(fps){
+    game.fps=fps;
+    this.echo("fps set "+fps);
+   }else{
+    this.echo("fps is "+game.fps);
+   }
   }
  };
 
