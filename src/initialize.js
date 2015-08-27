@@ -511,10 +511,10 @@ var Spike=enchant.Class.create(MapChip,{
   initialize: function(x,y,on_time,off_time){
    // 作成時はマップに登録していないのでプレイヤーの速度を取得できない
    MapChip.call(this,x,y);
-   if(on_time <= 0){
+   if(on_time < 0){
     throw new Error("on_time must be less than 0");
    }
-   if(off_time <= 0){
+   if(off_time < 0){
     throw new Error("off_time must be less than 0");
    }
    this.on_time=on_time;
@@ -563,15 +563,14 @@ var Spike=enchant.Class.create(MapChip,{
   },
   thinkingRoutine: function(){
    // think+toggle_on_offで2フレーム消費
-   // var wait_count=(16/this.parentNode.parentNode.player.baseVelocity) || 4;
-   if(!this.on_time){
+   if(this.on_time===undefined){
     this.on_time= Math.floor(16/this.parentNode.parentNode.player.baseVelocity)*10;
     this.on_time-=2;
     if(this.on_time<1){
      this.on_time=1;
     }
    }
-   if(!this.off_time){
+   if(this.off_time===undefined){
     this.off_time= Math.floor(16/this.parentNode.parentNode.player.baseVelocity)*2;
     this.off_time-=2;
     if(this.off_time<1){
@@ -580,7 +579,10 @@ var Spike=enchant.Class.create(MapChip,{
    }
    this.pushCommand(new this.toggle_on_off(this,{}));
    // toggleをしてからのため逆に設定する
-   this.pushCommand('wait',{count: (this.state?this.off_time:this.on_time)});
+   var count=(this.state?this.off_time:this.on_time);
+   if(count>0){
+    this.pushCommand('wait',{count:count });
+   }
    // this.pushCommand('wait',{count: 30-2});
   }
 });
