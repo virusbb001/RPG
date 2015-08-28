@@ -73,6 +73,7 @@ $(function(){
   game.rootScene.backgroundColor="#000000";
   register_maps(game);
   map_manager.move_player(["F1"],1,1);
+  var player=map_manager.map_list.F1.availableChara.player;
 
   // ポーズ設定
   pause_scene=new Scene();
@@ -82,16 +83,13 @@ $(function(){
   pause_scene.addChild(pause_text);
 
   // 最初のメッセージ表示
-  /*
   player.pushCommand(new player.waitMessage(player,{messages:[
      "[Zキーを押して次に進む]",
      "デモ版\"RPG\"にようこそ",
-     "このゲームでは\n塔の頂上を目指すことです",
-     "マップのどこかにある\n階段に乗ると、\n上に行くことが出来ます",
-     "では、頑張ってください！",
-     "カーソルキー(←↓↑→)で\n上下左右に移動します"]})
+     "カーソルキー(←↓↑→)で\n上下左右に移動します",
+     "Xキーで向いている方向の\nキャラクターや物を\n調べることが出来ます",
+     "ためしに，\n右にある看板を\n調べてみましょう"]})
   );
-  */
  }
 
  game.addEventListener('pausebuttondown',function(){
