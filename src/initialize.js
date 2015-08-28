@@ -332,7 +332,7 @@ var Player=enchant.Class.create(Knight,{
     * 体力
     * @type Number
     */
-   this.hp=20;
+   this.hp=5;
   },
   thinkingRoutine:function(){
    this.pushCommand(new this.walkInput(this,{}));
