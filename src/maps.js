@@ -651,7 +651,7 @@ function register_maps(game){
 
  // 迷路
  (function(){
-   var map=RPG_Util.convertMaze2Map(RPG_Util.generateMaze(21,21));
+   var map=RPG_Util.convertMaze2Map(RPG_Util.generateMaze(15,15));
    map.image=game.assets['images/map1.png'];
 
    var player=new Player(1,1);
@@ -670,7 +670,7 @@ function register_maps(game){
      }
 
      // 初期位置かゴールなら無視
-     if((x==1 && y==1) || (x==19 && y==19)){
+     if((x==1 && y==1) || (x==13 && y==13)){
       continue;
      }
      var corner=(!maze[y][x-1] || !maze[y][x+1]) && (!maze[y-1][x] || !maze[y+1][x]);
@@ -686,7 +686,7 @@ function register_maps(game){
      }
     }
    }
-   var stair=new Stair(19,19,2,2,"game_clear");
+   var stair=new Stair(13,13,2,2,"game_clear");
    stair.image=images.upStair;
 
    var map_scene=new MapScene(player,map);
