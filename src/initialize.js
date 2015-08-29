@@ -372,7 +372,7 @@ var Player=enchant.Class.create(Knight,{
       }
      }else{
       if(state==1){
-       this.owner.pushCommand("attack");
+       this.owner.pushCommand("check"); //一時的にcheckに変更
       }else if(state==2){
        this.owner.pushCommand("check");
       }
