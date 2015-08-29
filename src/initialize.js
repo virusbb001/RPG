@@ -399,14 +399,14 @@ var Player=enchant.Class.create(Knight,{
      this.messages=messages.concat();
      this.mes_win=new MessageWindow();
      this.mes_win.set_message(this.messages[0]);
-     this.flag=true;
+     this.flag=false;
     },
     action: function(){
      // 表示されていなくてかつZキーが押されている途中でなければ表示
      if(!this.mes_win.parentNode&&this.flag){
       this.mes_win.toggle_show();
      }
-     if(game.input.Z){
+     if(game.input.Z || game.input.enter){
       if(this.flag){
        this.messages.shift();
        if(this.messages[0]){
