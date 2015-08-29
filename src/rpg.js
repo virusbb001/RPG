@@ -63,6 +63,7 @@ $(function(){
  game.keybind(90,"Z"); // Z
  game.keybind(88,"X"); // X
  game.keybind(67,"C"); // C
+ game.keybind(13,"enter");
  game.keybind(16,"shift");
 
  map_manager.set_core(game);
@@ -87,7 +88,7 @@ $(function(){
      "[Zキーを押して次に進む]",
      "デモ版\"RPG\"にようこそ",
      "カーソルキー(←↓↑→)で\n上下左右に移動します",
-     "Xキーで向いている方向の\nキャラクターや物を\n調べることが出来ます",
+     "ZキーかXキーで\n向いている方向の\nキャラクターや物を\n調べることが出来ます",
      "ためしに，\n右にある看板を\n調べてみましょう"]})
   );
  }
