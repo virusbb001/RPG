@@ -35,7 +35,7 @@ function toggle_pause(){
   game.resume()
  }else{
   // var text=message_list[Math.floor(Math.random()*message_list.length)];
-  var text=message_list[Math.floor(Math.random()*1000)==0? 1: 0];
+  var text=message_list[Math.floor(Math.random()*2)==0? 1: 0];
   pause_text.setText(text);
   pause_text.x=game.width/2-text.length*16/2;
   game.pushScene(pause_scene);
